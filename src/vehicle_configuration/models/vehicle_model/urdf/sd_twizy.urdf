@@ -1,0 +1,14 @@
+<robot name="twizy">
+  <material name="green">
+    <color rgba="0 0.8 0 1"/>
+  </material>
+  <link name="base_link">
+    <visual>
+      <origin rpy="0 0 3.14" xyz="0.0 0.32 0.0"/>
+      <geometry>
+        <mesh filename="package://vehicle_model/mesh/sd_twizy.stl" scale="0.2 0.2 0.2"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+</robot>

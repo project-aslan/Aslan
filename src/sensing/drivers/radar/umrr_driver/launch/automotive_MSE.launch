@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="config_file" default="$(find umrr_driver)/cfg/MSE_config.yaml" />
+    <arg name ="node_namespace" default ="radar_mse" />
+    <arg name ="show_raw_targets" default ="False" />
+
+    <rosparam file="$(arg config_file)" subst_value="true"/>
+    <!-- Group nodes to provide convenient way of starting multiple nodes -->
+    <group ns="$(arg node_namespace)">
+        <node name="mse_can_publisher" pkg="umrr_driver" type="umrr_can_publisher.py" output="screen" required="true">
+                <param name="frame_id" value="$(arg node_namespace)" />
+         </node>
+        <node name="mse_conv" pkg="umrr_driver" type="mse_converter.py" output="screen" required="true" />
+    </group>
+    <!-- launch visualization, too  -->
+    <include file="$(find umrr_driver)/launch/visualization.launch" >
+        <arg name="rviz_conf" value="$(find umrr_driver)/rviz/mse_vis.rviz" />
+    </include>
+
+</launch>
+
+
+

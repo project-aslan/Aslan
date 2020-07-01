@@ -1,0 +1,116 @@
+name : LIDAR
+desc :
+subs :
+    - name : Velodyne VLP-32C
+      desc : Launches the driver for the selected Velodyne sensor and publishes the pointcloud in points_raw.
+      probe: 'ping -c 1 -W 1 192.168.1.201 > /dev/null'
+      run  : roslaunch velodyne_pointcloud velodyne_vlp32c.launch
+    - name : Velodyne VLP-16
+      desc : Launches the driver for the selected Velodyne sensor and publishes the pointcloud in points_raw.
+      probe:
+      run  : roslaunch velodyne_pointcloud velodyne_vlp16.launch
+    - name : Ouster OS1
+      desc : Launches the driver for the Ouster OS1 LiDAR and publishes the pointcloud as points_raw.
+      probe:
+      run  : roslaunch ouster_ros os1.launch
+
+buttons:
+  vehicle_model:
+    desc   : Vehicle Model
+    run    : do_shell_exec "$(rospack find vehicle_model)/unzip.sh"
+    param  : vehicle_model
+    gui    :
+      vehicle_model_cmd_param:
+        func : '[ "sd_twizy" , "sd_env200" ][ self.radio_box_1.GetSelection() ]'
+      ext_toggle_enables:
+        - self.radio_box_1
+
+  setup_tf:
+    desc: Setup TF
+    run    : roslaunch aslan_gui baselink_to_localiser.launch
+    param  : setup_tf
+    gui    :
+      panel  : self.panel_setup_tf
+
+  rqt_configuration:
+    desc: rqt graph
+    run: rosrun rqt_graph rqt_graph
+
+  rviz_configuration:
+    desc: rviz
+    run: rosrun rviz rviz
+
+params:
+  - name: setup_tf
+    vars:
+      - name     : x
+        label    : 'x:'
+        kind     : num
+        step     : 0.1
+        v        : 1.2
+        cmd_param:
+          dash   : ''
+          delim  : ':='
+        rosparam : tf_x
+      - name     : y
+        label    : 'y:'
+        kind     : num
+        step     : 0.1
+        v        : 0.0
+        cmd_param:
+          dash   : ''
+          delim  : ':='
+        rosparam : tf_y
+      - name     : z
+        label    : 'z:'
+        kind     : num
+        step     : 0.1
+        v        : 2.0
+        cmd_param:
+          dash   : ''
+          delim  : ':='
+        rosparam : tf_z
+      - name     : yaw
+        label    : 'yaw:'
+        kind     : num
+        step     : 0.1
+        v        : 0.0
+        cmd_param:
+          dash   : ''
+          delim  : ':='
+        rosparam : tf_yaw
+      - name     : pitch
+        label    : 'pitch:'
+        kind     : num
+        step     : 0.1
+        v        : 0.0
+        cmd_param:
+          dash   : ''
+          delim  : ':='
+        rosparam : tf_pitch
+      - name     : roll
+        label    : 'roll:'
+        kind     : num
+        step     : 0.1
+        v        : 0.0
+        cmd_param:
+          dash   : ''
+          delim  : ':='
+        rosparam : tf_roll
+      - name     : frame_id
+        kind     : hide
+        v        : /base_link
+        cmd_param:
+          dash   : ''
+          delim  : ':='
+
+
+  - name: vehicle_model
+    vars:
+    - name        : vehicle_model_cmd_param
+      kind        : str
+      v           : sd_env200
+      cmd_param   :
+        delim       : ''
+
+

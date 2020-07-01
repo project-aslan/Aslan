@@ -1,0 +1,17 @@
+# Select a region of interest to get a cropped image.
+# The region is defined by four parameters
+# roi.width: with of the region
+# roi.height: height of the region
+# roi.x_offset at which pixel a long the x axis (horizontal) does the
+# cropped region start
+# roi.y_offset at which pixel a long the y axis (vertical) does the
+# cropped region start
+# The cropped image will then be Image[y_offset:y_offset+vertical, x_offset:x_offset+horizontal]
+# Notice that x_offset cannot be larger than img.width - roi.width
+# The same for y_offset, not larger than img.height - roi.height
+sensor_msgs/RegionOfInterest target_roi
+
+---
+# Exact match can not always reached
+sensor_msgs/RegionOfInterest reached_roi
+bool success

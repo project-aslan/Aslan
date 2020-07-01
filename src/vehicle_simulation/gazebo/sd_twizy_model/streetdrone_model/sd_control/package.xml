@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>sd_control</name>
+  <version>1.1.0</version>
+  <description>The sd_control package</description>
+
+  <maintainer email="fionan@streetdrone.com">Fionan O’Sullivan</maintainer>
+  <maintainer email="efimia@streetdrone.com">Efimia Panagiotaki</maintainer>
+
+  <license>Apache 2</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>gazebo_ros</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_depend>aslan_msgs</build_depend>
+
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>tf</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>aslan_msgs</exec_depend>
+  <exec_depend>joy</exec_depend>
+
+  <export>
+      <gazebo_ros gazebo_plugin_path="${prefix}/lib" gazebo_model_path="${prefix}/.."/>
+  </export>
+</package>

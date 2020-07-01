@@ -1,0 +1,479 @@
+buttons:
+  diagnostics:
+    run: rosrun check_message_alive check_message_alive
+
+subs:
+- subs :
+  - name : Path Points
+    desc : Planning
+    subs :
+      - name : Waypoints Loader
+        desc : Load waypoints
+        cmd  : roslaunch waypoint_maker waypoint_loader.launch
+        param: waypoint_loader
+        gui  :
+          dialog_width  : 550
+          dialog_height : 300
+          multi_lane_csv :
+            prop  : 1
+          replanning_mode :
+            flags : [ nl ]
+          resample_mode :
+            depend      : replanning_mode
+            depend_bool : 'lambda v : v == 1'
+          resample_interval :
+            depend      : replanning_mode
+            depend_bool : 'lambda v : v == 1'
+            flags : [ nl ]
+          velocity_max :
+            depend      : replanning_mode
+            depend_bool : 'lambda v : v == 1'
+            flags : [ nl ]
+          radius_thresh :
+            depend      : replanning_mode
+            depend_bool : 'lambda v : v == 1'
+            flags : [ nl ]
+          radius_min :
+            depend      : replanning_mode
+            depend_bool : 'lambda v : v == 1'
+            flags : [ nl ]
+          velocity_min :
+            depend      : replanning_mode
+            depend_bool : 'lambda v : v == 1'
+            flags : [ nl ]
+          accel_limit :
+            depend      : replanning_mode
+            depend_bool : 'lambda v : v == 1'
+            flags : [ nl ]
+          decel_limit :
+            depend      : replanning_mode
+            depend_bool : 'lambda v : v == 1'
+            flags : [ nl ]
+          velocity_offset :
+            depend      : replanning_mode
+            depend_bool : 'lambda v : v == 1'
+            flags : [ nl ]
+          end_point_offset :
+            depend      : replanning_mode
+            depend_bool : 'lambda v : v == 1'
+            flags : [ nl ]
+          dialog : MyDialogWaypointLoader
+      - name : Waypoints Saver
+        desc : Save Waypoints
+        cmd  : roslaunch waypoint_maker waypoint_saver.launch
+        param: waypoint_saver
+        gui  :
+          dialog_width: 400
+          dialog_height: 150
+          save_filename :
+            prop  : 1
+          save_velocity :
+            flags : [ nl ]
+- subs:
+  - name: Route Decision
+    desc: Route planning
+    subs:
+      - name: Lane Selection
+        desc: Traffic waypoints and lane select launching
+        cmd: roslaunch lane_planner lane_select.launch
+        param: lane_select
+        gui:
+          dialog_height: 200
+
+- subs:
+  - name: Hybrid A* Planner
+    desc: Path planning based on the A* Planner algorithm
+    subs:
+      - name: Obstacle Search
+        desc: Obstacle Avoid
+        cmd: roslaunch astar_planner obstacle_avoid.launch
+
+      - name: Obstacle Sim
+        desc : Simulate obstacle for testing on rviz only
+        cmd : roslaunch astar_planner obstacle_sim.launch
+
+      - name: Velocity Request
+        desc: Velocity Set
+        cmd: roslaunch astar_planner velocity_set.launch
+        param: velocity_set
+        gui:
+          dialog_width: 200
+          dialog_height: 300
+
+- subs:
+  - name: Path planning
+    desc: Path planning
+    subs:
+      - name: Pure Pursuit
+        desc: Pure pursuit algorithm
+        cmd: roslaunch waypoint_follower pure_pursuit.launch
+        param: waypoint_follower
+        gui:
+          dialog_width: 550
+          dialog_height: 300
+          velocity:
+            depend: param_flag
+            depend_bool: 'lambda v : v == 1'
+          lookahead_distance:
+            depend: param_flag
+            depend_bool: 'lambda v : v == 1'
+          minimum_lookahead_distance:
+            depend: param_flag
+            depend_bool: 'lambda v : v == 0'
+          lookahead_ratio:
+            depend: param_flag
+            depend_bool: 'lambda v : v == 0'
+          stat_topic: [ lf ]
+      - name: Low Pass Filtering
+        desc: Low pass filter on twist command
+        cmd: roslaunch waypoint_follower twist_filter.launch
+        param: twist_filter
+        gui:
+          dialog_width: 500
+          dialog_height: 200
+
+params :
+  - name: waypoint_loader
+    topic: /config/waypoint_loader
+    msg: ConfigWaypointLoader
+    vars:
+      - name: multi_lane_csv
+        desc: Input csv
+        label: 'multi_lane'
+        kind: path
+        path_type: multi
+        v: /tmp/driving_lane.csv
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: replanning_mode
+        desc: Enable velocity replanning mode
+        label: 'replanning_mode'
+        kind: checkbox
+        v: false
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: resample_mode
+        desc: Enable resampling mode
+        label: resample mode
+        kind: checkbox
+        v: true
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: resample_interval
+        desc: All waypoints are resampled by this interval [m]
+        label: resample interval [m]
+        v: 1.0
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: velocity_max
+        desc: All velocities are limited under Vmax [km/h]
+        label: Velocity Max Limit - Vmax [km/h]
+        min: 10.0
+        max: 60.0
+        v: 20.0
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: radius_thresh
+        desc: When the estimated turning radius > Rth [m], the area is recognized as a curve
+        label: Curve Recognize - Rth [m]
+        min: 10.0
+        max: 100.0
+        v: 20.0
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: radius_min
+        desc: In curves, when the turning radius R is Rmin, velocity becomes Vmin.
+        label: Minimum Turning Radius in curves - Rmin [m]
+        min: 1.0
+        max: 10.0
+        v: 6.0
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: velocity_min
+        desc: In curves, when the turning radius R is Rmin, velocity becomes Vmin.
+        label: Minimum Velocity in curves - Vmin [km/h]
+        min: 0.0
+        max: 10.0
+        v: 4.0
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: accel_limit
+        desc: Maximum value of acceleration on all waypoints [km/h]
+        label: Acceleration Limit - Accel limit [m/s^2]
+        min: 0.0
+        max: 5.0
+        v: 0.98
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: decel_limit
+        desc: Maximum value of deceleration on all waypoints [km/h]
+        label: Deceleration Limit - Decel limit [m/s^2]
+        min: 0.0
+        max: 5.0
+        v: 0.98
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: velocity_offset
+        desc: Planned velocity offset for the response delay
+        label: Velocity Offset
+        min: 0
+        max: 30
+        v: 4
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: end_point_offset
+        desc: Expanded end points (v = 0) for safe stopping
+        label: End Point Offset
+        min: 0
+        max: 30
+        v: 5
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: disable_decision_maker
+        desc: if you not check this, you have to run a decisionmaker node.
+        label: 'disable_decision_maker'
+        kind: checkbox
+        v: true
+        cmd_param:
+          dash: ''
+          delim: ':='
+
+  - name  : waypoint_saver
+    vars  :
+      - name      : save_filename
+        desc      : Output file to save the waypoints csv
+        label     : Save File
+        kind      : path
+        path_type : save
+        v         : '/tmp/saved_waypoints.csv'
+        cmd_param :
+          var_name    : save_filename
+          dash        : ''
+          delim       : ':='
+      - name  : save_velocity
+        descs : When you save the velocity in each waypoints, Please check if /current_velocity is publishing
+        label : Save /current_velocity
+        kind    : checkbox
+        v       : False
+        cmd_param :
+          dash        : ''
+          delim       : ':='
+      - name      : interval
+        desc      : Difference in distance between each waypoint and the following one
+        label     : Interval
+        v         : 1.0
+        cmd_param :
+          dash        : ''
+          delim       : ':='
+
+  - name  : lane_select
+    topic : /config/lane_select
+    msg   : ConfigLaneSelect
+    vars  :
+      - name      : distance_threshold_neighbor_lanes
+        desc      : Distance threshold to neighbor lanes (m)
+        label     : Distance threshold to neighbor lanes (m)
+        min       : 1.0
+        max       : 10.0
+        v         : 5.0
+      - name      : lane_change_interval
+        desc      : Lane Change Interval After Lane merge (m)
+        label     : Lane Change Interval After Lane merge (m)
+        min       : 1.0
+        max       : 50.0
+        v         : 10.0
+      - name      : lane_change_target_ratio
+        desc      : Lane Change Target Ratio (m/s)
+        label     : Lane Change Target Ratio (m/s)
+        min       : 0
+        max       : 20
+        v         : 5.0
+      - name      : lane_change_target_minimum
+        desc      : Lane Change Target Minimum (m)
+        label     : Lane Change Target Minimum (m)
+        min       : 2.0
+        max       : 30.0
+        v         : 10.0
+      - name      : vector_length_hermite_curve
+        desc      : Vector Length of Hermite Curve
+        label     : Vector Length of Hermite Curve (m)
+        min       : 1.0
+        max       : 50
+        v         : 10.0
+      - name : enablePlannerDynamicSwitch
+        desc : Enable Planner dynamical switch
+        label: Enable Planner dynamical switch
+        kind : checkbox
+        v    : False
+        cmd_param:
+          dash     : ''
+          delim    : ':='
+
+
+  - name  : velocity_set
+    topic : /config/velocity_set
+    msg   : ConfigVelocitySet
+    vars  :
+      - name      : lidar_points_topic
+        desc      : pointcloud2 topic for obstacle detection
+        label     : Lidar Points Topic
+        kind      : str
+        v         : points_no_ground
+        cmd_param :
+          dash      : ''
+          delim     : ':='
+      - name: radar_points_topic
+        desc: pointcloud2 topic for obstacle detection
+        label: Radar Points Topic
+        kind: str
+        v: radar/target_list_cartesian
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name  : stop_distance_obstacle
+        desc  : Stop Distance for Obstacle (m)
+        label : Stop Distance for Obstacle (m)
+        min   : 0
+        max   : 50
+        v     : 15.0
+      - name  : stop_distance_stopline
+        desc  : Stop Distance for Stopline(m)
+        label : Stop Distance for Stopline(m)
+        min   : 0
+        max   : 50
+        v     : 5.0
+      - name  : detection_range
+        desc  : Detection Range (m)
+        label : Detection Range (m)
+        min   : 0
+        max   : 10
+        v     : 1.3
+      - name  : deceleration_range
+        desc  : Deceleration Range (m)
+        label : Deceleration Range (m)
+        min   : 0
+        max   : 10
+        v     : 0
+      - name  : threshold_points
+        desc  : Lidar Points Threshold
+        label : Lidar Points Threshold
+        min   : 0
+        max   : 30
+        v     : 5
+      - name  : radar_threshold_points
+        desc  : Radar Points Threshold
+        label : Radar Points Threshold
+        min   : 0
+        max   : 30
+        v     : 1
+      - name  : detection_height_top
+        desc  : Detection Height Top (m)
+        label : Detection Height Top (m)
+        min   : 0
+        max   : 10
+        v     : 0.1
+      - name  : detection_height_bottom
+        desc  : Detection Height Bottom (m)
+        label : Detection Height Bottom (m)
+        min   : -10
+        max   : 0
+        v     : -1.5
+
+  - name  : waypoint_follower
+    topic : /config/waypoint_follower
+    msg   : ConfigWaypointFollower
+    vars  :
+      - name  : param_flag
+        desc  : param_flag
+        kind  : radio_box
+        choices:
+          - Waypoint
+          - Dialog
+        descs :
+          - Waypoint
+          - Dialog
+        v     : 1
+      - name  : velocity
+        desc  : Constant Velocity
+        label : Velocity (kph)
+        min   : 0
+        max   : 60
+        v     : 5.0
+      - name  : lookahead_distance
+        desc  : Next target waypoint
+        label : Lookahead Distance
+        min   : 0
+        max   : 30
+        v     : 4.0
+      - name  : lookahead_ratio
+        desc  : Lookahead Ratio
+        label : Lookahead Ratio
+        min   : 0.0
+        max   : 5.0
+        v     : 2.0
+      - name  : minimum_lookahead_distance
+        desc  : Minimum lookahead distance
+        label : Minimum lookahead distance
+        min   : 0.0
+        max   : 20.0
+        v     : 6.0
+      - name    : is_linear_interpolation
+        desc    : Linear Interpolation mode
+        label   : 'Linear Interpolation'
+        kind    : checkbox
+        v       : True
+        cmd_param :
+          dash        : ''
+          delim       : ':='
+      - name    : publishes_for_steering_robot
+        desc    : Publish topic for steering robot
+        label   : 'Publishes topic for steering robot'
+        kind    : checkbox
+        v       : False
+        cmd_param :
+          dash        : ''
+          delim       : ':='
+
+  - name: twist_filter
+    topic: /config/twist_filter
+    msg: ConfigTwistFilter
+    vars:
+      - name: lateral_accel_limit
+        desc: Lateral Acceleration limit
+        label: 'Lateral Acceleration limit :'
+        min: 0
+        max: 5.0
+        v: 0.8
+      - name: lowpass_gain_linear_x
+        desc: Low pass gain linear x
+        label: 'Low pass gain linear x :'
+        min: 0
+        max: 1.0
+        v: 0.0
+      - name: lowpass_gain_angular_z
+        desc: Low pass gain angular z
+        label: 'Low pass gain angular z :'
+        min: 0
+        max: 1.0
+        v: 0.0
+
+
+
+
+
+
+
+
+

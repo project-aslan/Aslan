@@ -1,0 +1,19 @@
+name: Cameras
+desc:
+subs:
+  - name: PointGrey Generic
+    desc: PointGrey Generic Camera Driver
+    probe:
+    run: roslaunch pointgrey_camera_driver camera.launch
+  - name: Spinnaker SDK
+    desc: Spinnaker SDK for PointGrey cameras
+    probe:
+    run: roslaunch spinnaker_sdk_camera_driver acquisition.launch
+  - name: Basler Ace
+    desc: Basler Ace, pylon driver
+    probe:
+    run: roslaunch pylon_camera pylon_camera_node.launch
+  - name: ZED
+    desc: ZED Camera driver
+    probe:
+    run: roslaunch zed_wrapped zed.launch

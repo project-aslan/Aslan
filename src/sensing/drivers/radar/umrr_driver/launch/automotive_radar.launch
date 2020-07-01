@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="config_file" default="$(find umrr_driver)/cfg/example_config.yaml" />
+    <arg name ="node_namespace" default ="radar" />
+    <arg name ="deactivate_radar_pipeline" default="False" />
+    <arg name ="filter_settings" default="$(find umrr_driver)/cfg/pc2filter.cfg" />
+
+    <rosparam file="$(arg config_file)" subst_value="true"/>
+    <!-- Group nodes to provide convenient way of starting multiple nodes -->
+    <group ns="$(arg node_namespace)">
+
+<!--         <node name="umrr_can_publisher" pkg="umrr_driver" type="umrr_can_publisher.py" output="screen" required="true"-->
+<!--               launch-prefix="valgrind &#45;&#45;tool=callgrind &#45;&#45;callgrind-out-file='callgrind.umrr_pub.%p'">-->
+        <node name="umrr_can_publisher" pkg="umrr_driver" type="umrr_can_publisher.py" output="screen" required="true">
+                <param name="frame_id" value="$(arg node_namespace)" />
+         </node>
+        <!-- provide possibility to start driver without radar pipeline -->
+        <group unless="$(arg deactivate_radar_pipeline)">
+            <node name="pcl_filter" pkg="umrr_driver" type="pc2_filter.py" output="screen" >
+                    <param name="input_topic" value="target_list" />
+            </node>
+            <node name="coord_converter" pkg="umrr_driver" type="spherical_coord_2_cartesian_coord" output="screen">
+                <param name="data_frame" value="" />
+                <param name="target_frame" value="" />
+            </node>
+<!-- is used to load filter settings upon startup -->
+<!--            <node name="dynamic_reconfigure_load" pkg="dynamic_reconfigure" type="dynparam" args="load pcl_filter $(arg filter_settings)" />-->
+        </group>
+
+    </group>
+</launch>

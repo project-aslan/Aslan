@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>umrr_driver</name>
+  <version>1.0.0</version>
+  <description>The umrr_driver package</description>
+
+
+  <maintainer email="support@smartmicro.de">Torben Bruns</maintainer>
+
+
+  <license>BSD</license>
+
+  <url type="website">http://www.smartmicro.de</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>rospy</build_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <exec_depend>rospy</exec_depend>
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
+  <depend>dynamic_reconfigure</depend>
+
+
+  <export>
+   
+  </export>
+</package>

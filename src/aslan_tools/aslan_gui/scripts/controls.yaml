@@ -1,0 +1,57 @@
+buttons:
+  vehicle_interface:
+    desc: The StreetDrone Vehicle Interface
+    run:  roslaunch sd_vehicle_interface sd_vehicle_interface.launch
+    param: sd_vi
+    gui:
+      vehicle_cmd_param :
+        func : '[ "twizy" , "env200" ][ self.radio_box_vehicle.GetSelection() ]'
+      ins_cmd_param:
+        func: '[ "oxts" , "peak" , "none" ][ self.radio_box_ins.GetSelection() ]'
+      speed_input_cmd_param:
+        func: '[ "vehicle_can_speed" , "imu_speed" , "ndt_speed" ][ self.radio_box_speed_input.GetSelection() ]'
+      mode_cmd_param:
+        func: '[ "false" , "true"][ self.radio_box_run.GetSelection() ]'
+      ext_toggle_enables:
+        - self.radio_box_vehicle
+        - self.radio_box_ins
+        - self.radio_box_speed_input
+        - self.radio_box_run
+
+  socketcan:
+    run: sh -c "$(rospack find sd_vehicle_interface)/config.sh"
+
+params :
+  - name : sd_vi
+    vars :
+    - name : vehicle_cmd_param
+      kind : str
+      v    : env200
+      cmd_param:
+        var_name: sd_vehicle
+        dash: ''
+        delim: ':='
+    - name : ins_cmd_param
+      kind : str
+      v    : oxts
+      cmd_param:
+        var_name: sd_gps_imu
+        dash: ''
+        delim: ':='
+    - name : speed_input_cmd_param
+      kind : str
+      v   : vehicle_can_speed
+      cmd_param:
+        var_name: sd_speed_source
+        dash: ''
+        delim: ':='
+    - name: mode_cmd_param
+      kind: str
+      v: false
+      cmd_param:
+        var_name: sd_simulation_mode
+        dash: ''
+        delim: ':='
+
+
+

@@ -1,0 +1,31 @@
+{
+   "header": {
+      "canId"      : 1280,
+	  "modeBit"	   : null,
+	  "maximum"    : 1,
+      "0"   : {
+      "Number_Of_Objects": {"offset" :    0,"resolution" : 1       , "start_byte": 0, "start_bit": 0, "end_byte": 0, "end_bit": 0 },
+      "Cycle_Duration"   : {"offset" :    0,"resolution" : 0.001, "start_byte": 2, "start_bit": 0, "end_byte": 2, "end_bit": 0 },
+      "Cycle_Count"   : {"offset" :    0,"resolution" : 1, "start_byte": 4, "start_bit": 0, "end_byte": 7, "end_bit": 0 }
+      }
+   },
+   "body": {
+      "canId"      : 1281,
+      "rangeId" : 79,
+	   "modeBit"	   : {"multiMode" : 0,"resolution" : 1 , "start_byte": 0, "start_bit": 0, "end_byte": 0, "end_bit": 1 },
+      "maximum": 1,
+      "0"          :{
+         "Object_Number": {"offset" :    0,"resolution" : 1.0    , "start_byte" : 0, "start_bit" : 0, "end_byte" : 1, "end_bit" : 0},
+         "x_Point"        : {"offset" :    4096,"resolution" : 0.128    , "start_byte" : 0, "start_bit" : 2, "end_byte" : 1, "end_bit" : 6},
+         "y_Point"        : {"offset" :    4096,"resolution" : 0.128    , "start_byte" : 1, "start_bit" : 7, "end_byte" : 3, "end_bit" : 3},
+         "Speed"        : {"offset" :    1024,"resolution" : 0.1    , "start_byte" : 3, "start_bit" : 4, "end_byte" : 4, "end_bit" : 6},
+         "Heading"        : {"offset" :    1024,"resolution" : 0.177    , "start_byte" : 4, "start_bit" : 7, "end_byte" : 6, "end_bit" : 1},
+         "Len"        : {"offset" :    0,"resolution" : 0.2    , "start_byte" : 6, "start_bit" : 2, "end_byte" : 7, "end_bit" : 0},
+         "ID" : {"offset" : 0,"resolution" : 1.0    , "start_byte" : 7, "start_bit" : 1, "end_byte" : 7, "end_bit" : 7}
+            },
+      "1"          :{
+         "Quality"      : {"offset" : 0,"resolution" : 0.001,"start_byte" : 0,"start_bit" : 2,"end_byte" : 1,"end_bit" : 4},
+         "Acceleration"    : {"offset" :  1024,"resolution" : 0.01,"start_byte" : 1,"start_bit" : 5,"end_byte" : 2,"end_bit" : 7}
+  		}
+	}
+}

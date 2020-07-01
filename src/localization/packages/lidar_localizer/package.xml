@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>lidar_localizer</name>
+  <version>1.0.0</version>
+  <description>The lidar_localizer package</description>
+
+  <maintainer email="efimia@streetdrone.com">Efimia Panagiotaki</maintainer>
+
+  <license>Apache 2</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>aslan_build_flags</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>pcl_ros</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>aslan_msgs</build_depend>
+  <build_depend>pcl_conversions</build_depend>
+  <build_depend>message_filters</build_depend>
+  <build_depend>velodyne_pointcloud</build_depend>
+  <build_depend>ndt_cpu</build_depend>
+  <build_depend>libpcl-all-dev</build_depend>
+  <build_depend>eigen</build_depend>
+  <build_depend>pcl_omp_registration</build_depend>
+  <build_depend>jsk_rviz_plugins</build_depend>
+
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>tf</exec_depend>
+  <exec_depend>pcl_ros</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>aslan_msgs</exec_depend>
+  <exec_depend>pcl_conversions</exec_depend>
+  <exec_depend>message_filters</exec_depend>
+  <exec_depend>velodyne_pointcloud</exec_depend>
+  <exec_depend>ndt_cpu</exec_depend>
+  <exec_depend>libpcl-all</exec_depend>
+  <exec_depend>eigen</exec_depend>
+  <exec_depend>pcl_omp_registration</exec_depend>
+  <exec_depend>jsk_rviz_plugins</exec_depend>
+
+  <export>  </export>
+</package>

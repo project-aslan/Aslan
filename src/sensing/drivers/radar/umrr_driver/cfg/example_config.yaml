@@ -1,0 +1,17 @@
+radar/umrr_can_publisher:
+  # parameters to send to sensor
+#  antenna_mode: {section: 3016, parameter: 0, value: 1}
+  # center_frequency: {section: 3016, parameter: 5, value: 2}
+  # necessary parameters
+  can_spec: "$(find umrr_driver)/can_spec/automotive_spec_new.json"
+  can_socket: "slcan0"
+  legacy_mode: False
+  # omit empty strings to be set by node (must not be edited by user)
+  sensor_type: ""
+  software_vers: ""
+  curr_antenna: ""
+
+
+
+
+

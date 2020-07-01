@@ -1,0 +1,10 @@
+Header header
+aslan_msgs/SteerCmd steer_cmd
+aslan_msgs/AccelCmd accel_cmd
+aslan_msgs/BrakeCmd brake_cmd
+aslan_msgs/LampCmd lamp_cmd
+int32 gear
+int32 mode
+geometry_msgs/TwistStamped twist_cmd
+aslan_msgs/ControlCommand ctrl_cmd
+int32 emergency

@@ -1,0 +1,11 @@
+<!-- -->
+<launch>
+    <arg name="enablePlannerDynamicSwitch" default="false"/>
+
+    <node pkg="lane_planner" type="traffic_waypoints" name="traffic_waypoints" output="log"/>
+
+    <node pkg="lane_planner" type="lane_select" name="lane_select" output="screen">
+        <param name="enablePlannerDynamicSwitch"   value="$(arg enablePlannerDynamicSwitch)"/>
+     </node>
+	
+</launch>

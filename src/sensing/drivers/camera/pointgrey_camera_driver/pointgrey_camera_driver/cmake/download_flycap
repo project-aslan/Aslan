@@ -1,0 +1,147 @@
+# Software License Agreement (BSD)
+#
+# @author    Mike Purvis <mpurvis@clearpathrobotics.com>
+# @copyright (c) 2014, Clearpath Robotics, Inc., All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without modification, are permitted provided that
+# the following conditions are met:
+# * Redistributions of source code must retain the above copyright notice, this list of conditions and the
+#   following disclaimer.
+# * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+#   following disclaimer in the documentation and/or other materials provided with the distribution.
+# * Neither the name of Clearpath Robotics nor the names of its contributors may be used to endorse or
+#   promote products derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+# PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+# TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+import cookielib
+import cStringIO
+import logging
+import shutil
+import subprocess
+import sys
+import tarfile
+import urllib
+import urllib2
+import os
+
+logging.basicConfig(level=logging.INFO)
+
+LOGIN_URL = 'https://www.ptgrey.com/login'
+LOGIN_DATA = {
+    'Email': 'code@clearpathrobotics.com',
+    'Password': 'uNjRxoH6NMsJvi6hyPCH'
+    }
+
+ARCHS = {
+    'x86_64': {
+        'current': (
+            'https://www.ptgrey.com/support/downloads/10767/', (
+                'flycapture2-2.11.3.121-amd64/libflycapture-2.11.3.121_amd64.deb',
+                'flycapture2-2.11.3.121-amd64/libflycapture-2.11.3.121_amd64-dev.deb'),
+            'usr/lib/libflycapture.so.2.11.3.121'),
+        'legacy': (
+            'https://www.ptgrey.com/support/downloads/10617/', (
+                'flycapture2-2.9.3.43-amd64/libflycapture-2.9.3.43_amd64.deb',
+                'flycapture2-2.9.3.43-amd64/libflycapture-2.9.3.43_amd64-dev.deb'),
+            'usr/lib/libflycapture.so.2.9.3.43')},
+    'i386': {
+        'current': (
+            'https://www.ptgrey.com/support/downloads/10768/', (
+                'flycapture2-2.11.3.121-i386/libflycapture-2.11.3.121_i386.deb',
+                'flycapture2-2.11.3.121-i386/libflycapture-2.11.3.121_i386-dev.deb'),
+            'usr/lib/libflycapture.so.2.11.3.121'),
+        'legacy': (
+            'https://www.ptgrey.com/support/downloads/10619/', (
+                'flycapture2-2.9.3.43-i386/libflycapture-2.9.3.43_i386.deb',
+                'flycapture2-2.9.3.43-i386/libflycapture-2.9.3.43_i386-dev.deb'),
+            'usr/lib/libflycapture.so.2.9.3.43')},
+    'armv7': {
+        'current': (
+            'https://www.ptgrey.com/support/downloads/10766/',
+            'flycapture.2.11.3.121_armhf',
+            'usr/lib/libflycapture.so.2.11.3.121'),
+        'legacy': (
+            'https://www.ptgrey.com/support/downloads/10618/',
+            'flycapture.2.9.3.43_armhf',
+            'usr/lib/libflycapture.so.2.9.3.43')},
+    'armv8': {
+        'current': (
+            'https://www.ptgrey.com/support/downloads/10765/',
+            'flycapture.2.11.3.121_arm64',
+            'usr/lib/libflycapture.so.2.11.3.121'),
+        'legacy': (
+            'https://www.ptgrey.com/support/downloads/10616/',
+            'flycapture.2.9.3.43_arm64',
+            'usr/lib/libflycapture.so.2.9.3.43')}
+}
+OS_LIBRARY_VERSION = {
+  'trusty': 'legacy',
+  'jessie': 'legacy',
+  'xenial': 'current'
+}
+
+arch, library_dest, os_code_name = sys.argv[1:]
+library_version = OS_LIBRARY_VERSION.get(os_code_name, 'current')
+
+logging.info("CPU architecture is %s", arch)
+logging.info("OS code name is %s", os_code_name)
+if arch.startswith('arm'):
+    archive_url, folder_name, shared_library = ARCHS[arch][library_version]
+else:
+    archive_url, debs, shared_library = ARCHS[arch][library_version]
+
+logging.info("Logging into ptgrey.com.")
+cj = cookielib.CookieJar()
+opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+opener.addheaders = [
+    ('User-agent', 'Mozilla/5.0'),
+    ('Referer', 'https://www.ptgrey.com')]
+opener.open(LOGIN_URL, urllib.urlencode(LOGIN_DATA))
+
+logging.info("Downloading SDK archive.")
+resp = opener.open(archive_url)
+
+logging.info("Unpacking tarball.")
+with tarfile.open(mode="r:gz", fileobj=cStringIO.StringIO(resp.read())) as tar:
+    tar.extractall()
+
+if arch.startswith('arm'):
+    logging.info("Copying ARM libs from: %s to %s", shared_library, library_dest)
+
+    # Creating (current_folder)/usr folder to eliminate need for if branching in
+    # Download_Flycap.cmake. x86 library is packaged different (contained in /usr
+    # folder) and in ARM there is no /usr folder, therefore we create it.
+    os.mkdir(os.path.join(os.getcwd(), "usr"))
+
+    # For every folder/file, move it into the /usr folder we just created.
+    for filename in os.listdir(os.path.join(os.getcwd(), folder_name)):
+        shutil.move(os.path.join(os.getcwd(), folder_name, filename),
+                    os.path.join(os.getcwd(), "usr/", filename))
+    os.rmdir(folder_name)
+
+    # now we do some thing for include files; move them into the /usr folder as well
+    include_path = os.path.join(os.getcwd(), "usr/include")
+    include_files = os.listdir(include_path)
+    flycap_folder = "flycapture"
+    os.mkdir(os.path.join(include_path, flycap_folder))
+
+    for files in include_files:
+	if files.endswith(".h"):
+            shutil.move(os.path.join(include_path, files), os.path.join(include_path, flycap_folder))
+
+    shutil.copyfile(shared_library, library_dest)
+else:
+    for deb in debs:
+        logging.info("Extracting: %s", deb)
+    	subprocess.check_call(['dpkg', '--extract', deb, '.'])
+
+    logging.info("Copying shared library.")
+    shutil.copyfile(shared_library, library_dest)

@@ -1,0 +1,6 @@
+<launch>
+
+	<node pkg="waypoint_follower" type="twist_filter" name="twist_filter" output="log"/>
+	<node pkg="waypoint_follower" type="twist_gate" name="twist_gate" output="log"/>
+
+</launch>

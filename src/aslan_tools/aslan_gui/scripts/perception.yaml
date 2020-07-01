@@ -1,0 +1,460 @@
+buttons :
+  pcd :
+    run   : roslaunch pcd_loader points_map_loader.launch
+    param : points_map_loader
+    gui   :
+      stdout_func : self.point_cloud_progress_bar
+      ext_toggle_enables :
+        - self.label_point_cloud_bar
+      stat_topic : [ pmap ]
+      panel     : self.panel_pcd
+
+  setup_tf_1 :
+    run    : roslaunch map_tf_generator map_tf_generate.launch
+
+subs:
+- subs :
+  - name: Data Downsampling
+    desc: Point cloud downsampling
+    subs:
+    - name: Voxel Grid
+      desc: Voxel Grid Filter for points downsampling
+      cmd: roslaunch voxel_grid_filter voxel_grid_filter.launch
+      param: voxel_grid_filter
+      gui:
+        dialog_height: 200
+        dialog_width: 300
+
+  - name: Points Masking
+    desc: Ground masking on points
+    subs:
+    - name : Ray Ground
+      desc : Ray Ground Filter performs ground filtering using a radial-concentric based approach
+      cmd  : roslaunch ray_ground_filter ray_ground_filter.launch
+      param: ray_ground_filter
+      gui  :
+        dialog_height : 350
+        dialog_width: 300
+
+- subs :
+  - name: Mapping
+    desc: Extract point cloud map
+    subs:
+    - name : NDT Mapping
+      desc: NDT Mapping for point cloud map
+      cmd: roslaunch lidar_localizer ndt_mapping.launch
+      param: ndt_mapping
+      gui:
+        dialog: MyDialogNDTMapping
+        dialog_width: 600
+        dialog_height: 400
+        use_odom:
+          flags: [ nl ]
+        imu_topic:
+          flags: [ nl ]
+
+  - name: Localization
+    desc: Point cloud downsampling
+    subs:
+    - name: NDT Matching
+      desc: NDT Matching localization technique
+      cmd: roslaunch lidar_localizer ndt_matching.launch
+      param: ndt
+      gui:
+        dialog_height: 400
+        stat_topic:
+        x:
+          user_category: ''
+        yaw:
+          flags: [ nl ]
+        max:
+          user_category: ''
+        layer:
+          flags: [ nl ]
+        use_odom:
+          flags: [ nl ]
+        imu_topic:
+          flags: [ nl ]
+        get_height:
+          flags: [ nl ]
+
+    - name : NDT Matching Monitor
+      desc : Monitors NDT localizer. Halts or resets localization if algorithm fails.
+      cmd  : roslaunch lidar_localizer ndt_matching_monitor.launch
+      param: ndt_matching_monitor
+      gui:
+        dialog_height: 200
+        dialog_width: 300
+
+
+params :
+  - name  : points_map_loader
+    vars  :
+      - name  : pcd_file
+        kind  : path
+        path_type : multi
+        v         : ''
+        cmd_param :
+          only_enable: True
+          dash       : ''
+          delim      : ':='
+
+  - name: voxel_grid_filter
+    topic: /config/voxel_grid_filter
+    msg: ConfigVoxelGridFilter
+    vars:
+      - name: points_topic
+        desc: input point topic to downsample
+        label: Points topic
+        kind: topic
+        topic_type: sensor_msgs/PointCloud2
+        v: /points_raw
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: voxel_leaf_size
+        desc: voxel leaf size
+        label: Voxel Leaf Size
+        min: 0
+        max: 10
+        v: 2.0
+      - name: measurement_range
+        desc: measurement range
+        label: Measurement Range
+        min: 0
+        max: 200
+        v: 200
+      - name: sync
+        kind: hide
+        v: False
+        cmd_param:
+          dash: ''
+          delim: ':='
+          only_enable: True
+
+  - name  : ray_ground_filter
+    topic : /config/ray_ground_filter
+    msg   : ConfigRayGroundFilter
+    vars  :
+      - name  : input_point_topic
+        desc  : Input PointCloud Topic name, ground filtering will be performed.
+        label : 'input_point_topic'
+        kind  : topic
+        topic_type : sensor_msgs/PointCloud2
+        v     : /points_raw
+        cmd_param :
+          dash        : ''
+          delim       : ':='
+      - name: no_ground_point_topic
+        desc: Output PointCloud Topic name, after ground filtering.
+        label: 'no_ground_output_topic'
+        kind: topic
+        topic_type: sensor_msgs/PointCloud2
+        v: /points_no_ground
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name  : sensor_height
+        desc  : Height of the sensor from the ground
+        label : Sensor height
+        min   : -5
+        max   : 5
+        v     : 1.8
+        cmd_param :
+          dash        : ''
+          delim       : ':='
+      - name  : clipping_height
+        desc  : Remove Points above this height value (default 0.2 meters)
+        label : Points max height
+        min   : -5
+        max   : 5
+        v     : 0.2
+        cmd_param :
+          dash        : ''
+          delim       : ':='
+      - name  : min_point_distance
+        desc  : Removes Points closer than this distance from the sensor origin (default 1.85 meters)
+        label : Points distance
+        min   : 0
+        max   : 5
+        v     : 1.85
+        cmd_param :
+          dash        : ''
+          delim       : ':='
+      - name  : radial_divider_angle
+        desc  : Angle of each Radial division on the XY Plane (default 0.08 degrees)
+        label : Radial division angle
+        min   : 0.01
+        max   : 5
+        v     : 0.08
+        cmd_param :
+          dash        : ''
+          delim       : ':='
+      - name  : concentric_divider_distance
+        desc  : Distance of each concentric division on the XY Plane (default 0.01 meters)
+        label : Concentric division distance
+        min   : 0.01
+        max   : 1
+        v     : 0.01
+        cmd_param :
+          dash        : ''
+          delim       : ':='
+      - name  : local_max_slope
+        desc  : Max Slope of the ground between Points (default 8 degrees)
+        label : Max points slope
+        min   : 1
+        max   : 25
+        v     : 8
+        cmd_param :
+          dash        : ''
+          delim       : ':='
+      - name  : general_max_slope
+        desc  : Max Slope of the ground in the entire PointCloud (default 5 degrees)
+        label : Maximum pointcloud slope
+        min   : 1
+        max   : 25
+        v     : 5
+        cmd_param :
+          dash        : ''
+          delim       : ':='
+      - name  : min_height_threshold
+        desc  : Minimum height threshold between points (default 0.05 meters)
+        label : Min height threshold
+        min   : 0.01
+        max   : 0.5
+        v     : 0.05
+        cmd_param :
+          dash        : ''
+          delim       : ':='
+      - name  : reclass_distance_threshold
+        desc  : Distance between points at which re classification will occur (default 0.2 meters)
+        label : Re-classification distance
+        min   : 0.01
+        max   : 1
+        v     : 0.2
+        cmd_param :
+          dash        : ''
+          delim       : ':='
+
+  - name: ndt
+    topic: /config/ndt
+    msg: ConfigNDT
+    vars:
+      - name: init_pos_gnss
+        desc: Initial position for localization initialization
+        kind: radio_box
+        choices:
+          - Initial Pos
+          - GNSS
+        descs:
+          - Initial Position in the map
+          - GNSS input for initial position
+        v: 0
+      - name: x
+        desc: x
+        label: 'x:'
+        v: 0.0
+      - name: y
+        desc: y
+        label: 'y:'
+        v: 0.0
+      - name: z
+        desc: z
+        label: 'z:'
+        v: 0.0
+      - name: roll
+        desc: roll
+        label: 'roll:'
+        v: 0.0
+      - name: pitch
+        desc: pitch
+        label: 'pitch:'
+        v: 0.0
+      - name: yaw
+        desc: yaw
+        label: 'yaw:'
+        v: 0.0
+      - name: use_predict_pose
+        desc: Pose prediction
+        label: Predict Pose
+        kind: radio_box
+        choices: [ 'OFF', 'ON' ]
+        descs: [ 'OFF', 'ON' ]
+        choices_style: h
+        v: 1
+      - name: resolution
+        desc: resolution
+        label: Cell Size while matching using ND (meters)
+        min: 0
+        max: 10
+        v: 1.0
+      - name: step_size
+        desc: step_size
+        label: Increment value between iterations while matching
+        min: 0
+        max: 1
+        v: 0.1
+      - name: trans_epsilon
+        desc: trans_epsilon
+        label: Value to decide convergence between iterations (meters)
+        min: 0
+        max: 0.1
+        v: 0.01
+      - name: max_iterations
+        desc: max_iterations
+        label: Maximum number of iterations before stopping matching
+        min: 1
+        max: 300
+        v: 30
+      - name: use_odom
+        desc: Use Odometry to try to reduce errors (read from /odom_pose)
+        label: Use Odometry
+        kind: checkbox
+        v: False
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: use_imu
+        desc: Use IMU to try to reduce errors
+        label: Use IMU
+        kind: checkbox
+        v: False
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: imu_topic
+        desc: IMU raw data source topic
+        label: imu_topic
+        v: /imu_raw
+        kind: topic
+        topic_type: sensor_msgs/Imu
+        cmd_param:
+          dash: ''
+          delim: ':='
+
+  - name: ndt_mapping
+    topic: /config/ndt_mapping
+    msg: ConfigNDTMapping
+    vars:
+      - name: resolution
+        desc: Cell Size while mapping using ND (meters) (default 1.0)
+        label: Resolution
+        min: 0.0
+        max: 10.0
+        v: 1.0
+      - name: step_size
+        desc: Increment value between iterations while matching (default 0.1)
+        label: Step Size
+        min: 0.0
+        max: 1.0
+        v: 0.1
+      - name: trans_epsilon
+        desc: Value to decide convergence between iterations (meters) (default 0.01)
+        label: Transformation Epsilon
+        min: 0.0
+        max: 0.1
+        v: 0.01
+      - name: max_iterations
+        desc: Maximum number of iterations before stopping matching (default 30)
+        label: Maximum Iterations
+        min: 1
+        max: 300
+        v: 30
+      - name: leaf_size
+        desc: Voxel Grid Size of the input scan (downsampling) (default 1.0)
+        label: Leaf Size
+        min: 0.0
+        max: 10.0
+        v: 1.0
+      - name: min_scan_range
+        desc: Ignore points closer than this value (meters) (default 5.0)
+        label: Minimum Scan Range
+        min: 0.0
+        max: 30.0
+        v: 5.0
+      - name: max_scan_range
+        desc: Ignore points far than this value (meters) (default 200.0)
+        label: Maximum Scan Range
+        min: 10.0
+        max: 200.0
+        v: 200.0
+      - name: min_add_scan_shift
+        desc: Minimum distance between points to be added to the final map (default 1.0)
+        label: Minimum Add Scan Shift
+        min: 0.0
+        max: 10.0
+        v: 1.0
+      - name: use_odom
+        desc: Use Odometry to try to reduce errors (read from /odom_pose)
+        label: Use Odometry
+        kind: checkbox
+        v: False
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: use_imu
+        desc: Use IMU to try to reduce errors
+        label: Use IMU
+        kind: checkbox
+        v: False
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: imu_topic
+        desc: IMU raw data source topic
+        label: imu_topic
+        v: /imu_raw
+        kind: topic
+        topic_type: sensor_msgs/Imu
+        cmd_param:
+          dash: ''
+          delim: ':='
+
+  - name : ndt_matching_monitor
+    vars :
+      - name      : iteration_threshold_warn
+        desc      : Number of maximum iterations before notifying a warning. Default 10
+        label     : iteration_threshold_warn
+        min       : 1
+        max       : 32
+        v         : 10
+        cmd_param :
+          dash      : ''
+          delim     : ':='
+      - name      : iteration_threshold_stop
+        desc      : Number of maximum iterations before using GNSS or stopping the localziation. Default 32
+        label     : iteration_threshold_stop
+        min       : 1
+        max       : 32
+        v         : 32
+        cmd_param :
+          dash      : ''
+          delim     : ':='
+      - name      : score_threshold_delta
+        desc      : Difference between consecutive scores to consider a safe match. Default 14.0
+        label     : score_threshold_delta
+        min       : 0.0
+        max       : 100.0
+        v         : 14.0
+        cmd_param :
+          dash      : ''
+          delim     : ':='
+      - name      : min_stable_samples
+        desc      : Minimum number of samples to start monitoring after a reset. Default 30
+        label     : min_stable_samples
+        min       : 5
+        max       : 100
+        v         : 30
+        cmd_param :
+          dash      : ''
+          delim     : ':='
+      - name      : fatal_time_threshold
+        desc      : When no GNSS is available a prediction based on the previous samples will be employed. If reinitialization fails the algorithm will stop after n secs. Default 2
+        label     : fatal_time_threshold
+        min       : 0.1
+        max       : 5.0
+        v         : 2.0
+        cmd_param :
+          dash      : ''
+          delim     : ':='
+

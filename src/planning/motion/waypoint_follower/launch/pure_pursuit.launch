@@ -1,0 +1,11 @@
+<launch>
+
+	<arg name="is_linear_interpolation" default="True"/>
+	<arg name="publishes_for_steering_robot" default="False"/>
+
+	<node pkg="waypoint_follower" type="pure_pursuit" name="pure_pursuit" output="screen">
+		<param name="is_linear_interpolation" value="$(arg is_linear_interpolation)"/>
+		<param name="publishes_for_steering_robot" value="$(arg publishes_for_steering_robot)"/>
+	</node>
+
+</launch>
