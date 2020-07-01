@@ -1,0 +1,25 @@
+#!/bin/bash
+MY_PATH=$(readlink -f  $(dirname $0))
+
+WORKING_DIR='--working-directory'
+ROSCORE_TERMINAL='--geometry=50x10+0+0'
+ASLAN_WIZARD='--geometry=50x10+500+0'
+OPTION_COMMAND='--command'
+
+MASTER_DISPLAY_OPTION="${ROSCORE_TERMINAL} ${OPTION_TITLE}\=\"roscore\""
+AW_DISPLAY_OPTION="${ASLAN_WIZARD} ${OPTION_TITLE}\=\"aslan_wizard\""
+
+if [ $(which gnome-terminal) ]; then
+    TERMINAL=gnome-terminal
+    GNOME_VERSION=$(gnome-terminal --version | cut -d '.' -f 2)
+    if [ ${GNOME_VERSION} -ge 14 ]; then
+        MASTER_DISPLAY_OPTION=''
+        AW_DISPLAY_OPTION=''
+    fi
+fi
+
+echo "Aslan Begins"
+
+${TERMINAL} ${MASTER_DISPLAY_OPTION} ${WORKING_DIR}=${MY_PATH} ${OPTION_COMMAND}="bash -c 'source ./devel/setup.bash; roscore'"&
+${TERMINAL} ${AW_DISPLAY_OPTION} ${WORKING_DIR}=${MY_PATH} ${OPTION_COMMAND}="bash -c 'source ./devel/setup.bash; rosrun aslan_gui aslan_wizard.py'"
+

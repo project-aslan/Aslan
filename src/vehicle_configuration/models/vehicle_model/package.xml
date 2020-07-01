@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>vehicle_model</name>
+  <version>1.0.0</version>
+
+  <description>The vehicle_model package</description>
+
+  <maintainer email="abdelrahman.barghout@streetdrone.com">Abdelrahman Barghouth</maintainer>
+  <maintainer email="efimia@streetdrone.com">Efimia Panagiotaki</maintainer>
+
+  <license>Apache 2</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+  </export>
+</package>

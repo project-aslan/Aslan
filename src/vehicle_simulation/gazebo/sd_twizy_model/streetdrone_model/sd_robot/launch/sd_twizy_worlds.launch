@@ -1,0 +1,70 @@
+<launch>
+    <env name="GAZEBO_MODEL_PATH" value="$(find sd_description)"/>
+    <env name="GAZEBO_RESOURCE_PATH" value="$(find sd_description)"/>
+    <arg name="namespace" default="sd_twizy"/>
+    <arg name="debug" default="false"/>
+    <arg name="gui" default="true"/>
+    <arg name="cmd_timeout" default="0.5"/>
+    <arg name="world" default="default"/>
+    <arg name="enable_rviz" default="true"/>
+
+
+    <param name="use_sim_time"  value="true" />
+
+    <arg name="rvizconfig" default="$(find sd_robot)/config/sd_twizy_rviz.rviz"/>
+
+    <group if="$(eval arg('world') != 'empty')">
+        <include file="$(find gazebo_ros)/launch/empty_world.launch">
+            <arg name="debug" value="$(arg debug)"/>
+            <arg name="gui" value="$(arg gui)"/>
+            <arg name="paused" value="false"/>
+            <arg name="use_sim_time" value="true"/>
+            <arg name="headless" value="false"/>
+            <arg name="verbose" value="true"/>
+            <arg name="world_name" value="$(find sd_robot)/worlds/$(arg world).world"/>
+        </include>
+    </group>
+
+    <group if="$(eval arg('world') == 'empty')">
+        <include file="$(find gazebo_ros)/launch/empty_world.launch">
+            <arg name="debug" value="$(arg debug)"/>
+            <arg name="gui" value="$(arg gui)"/>
+            <arg name="paused" value="false"/>
+            <arg name="use_sim_time" value="true"/>
+            <arg name="headless" value="false"/>
+        </include>
+    </group>
+
+
+    <param command="$(find xacro)/xacro '$(find sd_description)/urdf/sd_twizy.urdf.xacro' --inorder" name="robot_description"/>
+    <group if="$(eval arg('world') != 'silicon_osney')">
+        <!--Pose-->
+        <arg name="x" default="0"/>
+        <arg name="y" default="0"/>
+        <arg name="z" default="0.282"/>
+        <arg name="roll" default="0"/>
+        <arg name="pitch" default="0"/>
+        <arg name="yaw" default="0"/>
+        <node args="-urdf -model sd_twizy -param robot_description -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"
+              name="urdf_spawner" output="screen" pkg="gazebo_ros" respawn="false" type="spawn_model"/>
+    </group>
+
+    <group if="$(eval arg('world') == 'silicon_osney')">
+        <!--Pose-->
+        <arg name="x" default="-11.457164"/>
+        <arg name="y" default="88.218380"/>
+        <arg name="z" default="0.325994"/>
+        <arg name="roll" default="-0.000001"/>
+        <arg name="pitch" default="0.009502"/>
+        <arg name="yaw" default="-1.329235"/>
+        <node args="-urdf -model sd_twizy -param robot_description -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"
+              name="urdf_spawner" output="screen" pkg="gazebo_ros" respawn="false" type="spawn_model"/>
+    </group>
+
+    <include file = "$(find sd_control)/launch/sd_twizy_control.launch"/>
+
+    <group if="$(arg enable_rviz)">
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+    </group>
+
+</launch>

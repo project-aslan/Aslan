@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package>
+  <name>aslan_build_flags</name>
+  <version>1.0.0</version>
+  <description>Common build flags for Aslan.</description>
+
+  <maintainer email="abdelrahman.barghout@streetdrone.com">Abdelrahman Barghouth</maintainer>
+
+  <license>Apache 2</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+    <architecture_independent/>
+  </export>
+</package>

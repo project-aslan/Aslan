@@ -1,0 +1,7 @@
+name : Radar
+desc :
+subs :
+    - name : SmartMicro UMRR-11
+      desc :
+      probe:
+      run  : roslaunch umrr_driver radar_pipeline.launch

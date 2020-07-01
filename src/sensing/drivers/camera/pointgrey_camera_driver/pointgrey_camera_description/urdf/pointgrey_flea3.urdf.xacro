@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="pointgrey_flea3">
+  <!-- camera_{x,y,z,mass} are they physical properties of the camera since
+       flea3's can have different physical footprints.  -->
+  <xacro:macro name="pointgrey_flea3"
+    params="frame:=camera name:=camera camera_x:=0.0754 camera_y:=0.029 camera_z:=0.035 camera_mass:=0.085
+             hfov:=1.0471975512 fps:=120 width:=1272 height:=1016 format:=R8G8B8 near:=0.5 far:=300">
+
+    <link name="${frame}">
+      <inertial>
+        <mass value="${camera_mass}" />
+        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="${camera_x} ${camera_y} ${camera_z}"/>
+        </geometry>
+        <material name="dark_grey" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="${camera_x} ${camera_y} ${camera_z}" />
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${frame}_optical" />
+
+    <joint name="${frame}_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="-1.570796 0 -1.570796" />
+      <parent link="${frame}" />
+      <child link="${frame}_optical" />
+    </joint>
+
+    <!-- Gazebo -->
+    <gazebo reference="${frame}_optical">
+      <material>Gazebo/Grey</material>
+      <sensor type="camera" name="${name}">
+        <update_rate>${fps}</update_rate>
+        <camera name="${name}">
+          <pose>0 0 0 0 -1.5707 1.5707</pose>
+          <horizontal_fov>${hfov}</horizontal_fov>
+          <image>
+            <width>${width}</width>
+            <height>${height}</height>
+            <format>${format}</format>
+          </image>
+          <clip>
+            <near>${near}</near>
+            <far>${far}</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>${fps}</updateRate>
+          <cameraName>${name}</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>${frame}_optical</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+</robot>

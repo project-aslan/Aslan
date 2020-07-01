@@ -1,0 +1,4 @@
+pylon:
+  ubuntu:
+    source:
+      uri: "https://raw.githubusercontent.com/magazino/pylon_camera/indigo-devel/rosdep/pylon_sdk.rdmanifest"

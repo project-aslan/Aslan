@@ -1,0 +1,69 @@
+buttons:
+  twizy_sim:
+    run: roslaunch sd_robot sd_twizy_worlds.launch
+    param: twizy_sim
+    gui:
+      world_cmd_param:
+        func : '["default", "empty", "shapes", "park", "silicon_osney"][self.choice_worlds.GetSelection()]'
+      enable_rviz:
+        func : 'self.checkbox_gaz_rviz.GetValue()'
+      ext_toggle_enables:
+        - self.choice_worlds
+        - self.checkbox_gaz_rviz
+
+subs:
+  subs:
+  - name : Joystick Control
+    desc: Joystick control for the simulation
+    cmd: roslaunch sd_control sd_twizy_control_teleop.launch
+    param: joystick_control
+    gui:
+      dialog_height: 100
+      dialog_width: 200
+  - name : Keyboard Control
+    desc : Keyboard control for the simulation. Requires launching of the SD-VehicleInterface
+    cmd : do_shell_exec "$(rospack find sd_control)/keyboardlaunch.sh"
+
+params:
+  - name : joystick_control
+    desc : Map joystick buttons
+    vars :
+      - name : enable_button
+        desc: Enable control
+        label: enable_button
+        v: 0
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: throttle_axis
+        desc: Throttle button
+        label: throttle_axis
+        v: 1
+        cmd_param:
+          dash: ''
+          delim: ':='
+      - name: steer_axis
+        desc: Steer button
+        label: steer_axis
+        v: 0
+        cmd_param:
+          dash: ''
+          delim: ':='
+  - name : twizy_sim
+    vars:
+      - name : world_cmd_param
+        kind : str
+        v : default
+        cmd_param :
+          var_name : world
+          dash : ''
+          delim : ':='
+      - name : enable_rviz
+        kind : checkbox
+        v: true
+        cmd_param:
+          var : enable_rviz
+          dash: ''
+          delim: ':='
+
+

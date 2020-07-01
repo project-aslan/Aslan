@@ -1,0 +1,16 @@
+# Binning factor to get downsampled images. It refers here to any camera
+# setting which combines rectangular neighborhoods of pixels into larger
+# "super-pixels." It reduces the resolution of the output image to
+# (width / binning_x) x (height / binning_y).
+# The default values binning_x = binning_y = 0 are considered the same
+# as binning_x = binning_y = 1 (no subsampling).
+# Calling this service with target binning values will change the binning entry
+# in the published camera_info_msg
+uint32 target_binning_x
+uint32 target_binning_y
+
+---
+# Exact match can not always be reached
+uint32 reached_binning_x
+uint32 reached_binning_y
+bool success

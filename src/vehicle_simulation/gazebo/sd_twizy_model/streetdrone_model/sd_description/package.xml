@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>sd_description</name>
+  <version>1.1.0</version>
+  <description>The sd_description package</description>
+
+  <maintainer email="efimia@streetdrone.com">Efimia Panagiotaki</maintainer>
+
+  <license>Apache 2</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>urdf</build_depend>
+  <build_depend>xacro</build_depend>
+
+  <export>
+  </export>
+</package>

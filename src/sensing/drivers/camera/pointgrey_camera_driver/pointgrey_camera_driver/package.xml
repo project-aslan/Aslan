@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>pointgrey_camera_driver</name>
+  <version>0.13.4</version>
+  <description>Point Grey camera driver based on libflycapture2.</description>
+
+  <maintainer email="mpurvis@clearpathrobotics.com">Mike Purvis</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">http://ros.org/wiki/pointgrey_camera_driver</url>
+
+  <author>Chad Rockey</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>curl</build_depend>  <!-- to get ca-certificates for downloading flycapture -->
+  <build_depend>dpkg</build_depend>  <!-- for unpacking flycapture debs -->
+
+  <depend>roscpp</depend>
+  <depend>nodelet</depend>
+  <depend>sensor_msgs</depend>
+  <depend>wfov_camera_msgs</depend>
+  <depend>image_exposure_msgs</depend>
+  <depend>camera_info_manager</depend>
+  <depend>image_transport</depend>
+  <depend>dynamic_reconfigure</depend>
+  <depend>diagnostic_updater</depend>
+
+  <!-- Dependencies of libflycapture -->
+  <depend>libusb-1.0-dev</depend>
+  <depend>libraw1394-dev</depend>
+
+  <exec_depend>image_proc</exec_depend>
+  <exec_depend>stereo_image_proc</exec_depend>
+  
+  <test_depend>roslaunch</test_depend>
+  <test_depend>roslint</test_depend>
+
+  <export>
+    <nodelet plugin="${prefix}/nodelet_plugins.xml" />
+  </export>
+</package>

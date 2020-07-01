@@ -1,0 +1,93 @@
+##########################################
+################## GOAL ##################
+##########################################
+
+# Flag which indicates if the exposure times are provided and hence should be
+# set before grabbing
+bool exposure_given
+
+# Only relevant, if exposure_given is true:
+# The list of target exposure times in microseconds.
+# It is possible to grab only one image as well as several images with
+# different exposure times. This values can be overriden from the brightness
+# search, in case that the flag exposure_fixed is not true.
+float32[] exposure_times
+
+# Flag which indicates if the gain is provided and hence should be set before
+# grabbing
+bool gain_given
+
+# Only relevant, if gain_given is true:
+# The target gain in percent of the maximal value the camera supports.
+# For USB-Cameras, the gain is in dB, for GigE-Cameras it is given in so
+# called 'device specific units'. This value can be overriden from the
+# brightness search, in case that the gain_fixed flag is set to false.
+float32[] gain_values
+
+# Flag which indicates if the gamma value is provided and hence should be set
+# before grabbing
+bool gamma_given
+
+# Only relevant, if gain_given is true:
+# Gamma correction of pixel intensity.
+# Adjusts the brightness of the pixel values output by the camera's sensor
+# to account for a non-linearity in the human perception of brightness or
+# of the display system (such as CRT).
+float32[] gamma_values
+
+# Flag which indicates if the brightness values are provided and hence should
+# be set before grabbing
+bool brightness_given
+
+# Only relevant, if brightness_given is true:
+# The average intensity values of the images. It depends the exposure time
+# as well as the gain setting.
+float32[] brightness_values
+
+# Only relevant, if brightness_given is true:
+# If the camera should try reach the desired brightness, at least one of the
+# following flags MUST be set. If both are set, the interface will use the
+# profile that tries to keep the gain at minimum to reduce white noise.
+# 'exposure_auto' will adapt the exposure time to reach the brightness, wheras
+# 'gain_auto' does so by adapting the gain. If one of these flags is set to
+# false, the connected property will be kept fix.
+# In most of the cases trying to reach a target brightness only by varying the
+# gain and keeping the exposure time fix is not a good approach, because the
+# exposure range is many times higher than the gain range.
+bool exposure_auto
+bool gain_auto
+
+---
+##########################################
+################# RESULT #################
+##########################################
+
+# The resulting images with the inquired image intensity settings.
+# The size of the vector equals the size of the exposure_times or the
+# brightness_values-vector
+sensor_msgs/Image[] images
+
+# The CameraInfo obejct describing the camera properties for the above image
+# sequence. Static in many cases, but can also support variable binning setting
+sensor_msgs/CameraInfo cam_info
+
+# The reached values of the images e.g. the values that were set to the camera
+# before the grab
+float32[] reached_exposure_times
+
+float32[] reached_brightness_values
+
+float32[] reached_gain_values
+
+float32[] reached_gamma_values
+
+# Flag which indicates the success of the grabbing action
+# In case of failure, the images-vector contains only the images, that could be
+# grabbed before the failure occurred.
+bool success
+---
+##########################################
+################ FEEDBACK ################
+##########################################
+# The number of images already taken
+int32 curr_nr_images_taken

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name ="filter_settings" default="$(find umrr_driver)/cfg/pc2filter.cfg" />
+    <arg name ="data_frame" default ="radar" />
+    <arg name ="target_frame" default ="base_link" />
+    <arg name="input_topic" default="target_list" />
+
+    <!-- Group nodes to provide convenient way of starting multiple nodes -->
+    <node name="pcl_filter" pkg="umrr_driver" type="pc2_filter.py" output="screen" >
+        <param name="input_topic" value="$(arg input_topic)" />
+    </node>
+    <node name="coord_converter" pkg="umrr_driver" type="spherical_coord_2_cartesian_coord" output="screen">
+        <param name="data_frame" value="$(arg data_frame)" />
+        <param name="target_frame" value="$(arg target_frame)" />
+    </node>
+    <node name="dynamic_reconfigure_load" pkg="dynamic_reconfigure" type="dynparam" args="load pcl_filter $(arg filter_settings)" />
+</launch>

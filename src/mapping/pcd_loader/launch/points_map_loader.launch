@@ -1,0 +1,6 @@
+<launch>
+  <arg name="area" default="noupdate" />
+  <arg name="pcd_file" default="" />
+
+  <node pkg="pcd_loader" type="points_map_loader" name="points_map_loader" args="$(arg area) $(arg pcd_file) "/>
+</launch>

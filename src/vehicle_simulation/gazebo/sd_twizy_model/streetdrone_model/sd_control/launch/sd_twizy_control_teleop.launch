@@ -1,0 +1,13 @@
+<launch>
+  <arg name="enable_button" default="0"/>
+  <arg name="throttle_axis" default="1"/>
+  <arg name="steer_axis" default="0"/>
+
+  <node name="joy" pkg="joy" type="joy_node"/>
+
+  <node name="sd_teleop_joy" pkg="sd_control" type="sd_teleop_joy">
+    <param name="enable_button" value="$(arg enable_button)"/>
+    <param name="throttle_axis" value="$(arg throttle_axis)"/>
+    <param name="steer_axis" value="$(arg steer_axis)"/>
+  </node>
+</launch>
