@@ -28,7 +28,7 @@ Used for trials on real-world automated vehicles.
 - Vehicle Interface using SocketCAN
 - Gazebo simulation model and worlds: 3 ways of controlling the robot
 - Comprehensive documentation of the source code in the repo and inside the GUI
-- Online [tutorials]()
+- Online [tutorials](https://www.youtube.com/channel/UCnZLHdQ-KIL8RxWVrcbLSZg/videos)
 - Quick start resources: [rosbag](https://www.dropbox.com/s/50tljbponc4euas/siliconosney.bag?dl=0), [point cloud map](https://www.dropbox.com/s/he2d1ax3em7bkis/siliconosney.pcd?dl=0) and [waypoints csv](https://www.dropbox.com/s/ys9c5stu5vo1bkr/siliconosney.csv?dl=0)
 
 **Originally suggested at Autoware 1.10.0.  
@@ -133,11 +133,13 @@ To start the Project ASLAN GUI, simply execute the bash script:
 </p>
 
 ## Additional Resources
+Project Aslan Dockerhub: [projaslan/aslan](https://hub.docker.com/r/projaslan/aslan)  
+
 Project Aslan Website: [www.project-aslan.org](https://www.project-aslan.org/)
 
 Quick Start Resources: [rosbag](https://www.dropbox.com/s/50tljbponc4euas/siliconosney.bag?dl=0), [point cloud map](https://www.dropbox.com/s/he2d1ax3em7bkis/siliconosney.pcd?dl=0) and [waypoints csv](https://www.dropbox.com/s/ys9c5stu5vo1bkr/siliconosney.csv?dl=0)
 
-Online Tutorials: [Youtube Channel]()
+Online Tutorials: [Youtube Channel](https://www.youtube.com/channel/UCnZLHdQ-KIL8RxWVrcbLSZg/featured)
 
 ## Disclaimer
 A dedicated, trained and attentive safety driver must always be present in the driver's seat at all times and in all environments, monitoring the vehicle.  
@@ -145,5 +147,5 @@ THIS SOFTWARE IS FOR RESEARCH PURPOSES ONLY. YOU ARE RESPONSIBLE FOR COMPLYING W
 
 ## License
 
-Aslan Software is licensed under [Apache 2 License]()
+Aslan Software is licensed under [Apache 2 License](https://github.com/project-aslan/Aslan/blob/master/LICENSE)
 

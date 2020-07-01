@@ -5,7 +5,7 @@
 - **Nvidia drivers**:  
 Install the Nvidia drivers to enable the graphics inside the docker. Make sure to install the drivers that match the hardware on your target machine. Following the instructions [here](http://www.linuxandubuntu.com/home/how-to-install-latest-nvidia-drivers-in-linux).  
 After the installation has finished, reboot your machine `sudo reboot`.
-Check that nvidia has been properly installed by doing `nvidia-smi`.
+Check that nvidia has been properly installed by typing: `nvidia-smi`.
 
 - **Docker and Nvidia-docker**:
 
@@ -18,17 +18,17 @@ sudo apt-get install -y docker-ce nvidia-docker
 ```
 For more information please visit [nvidia-docker](https://github.com/NVIDIA/nvidia-docker/wiki/Installation-(version-1.0))
 
-## Build ASLAN docker
+## Build Aslan docker
 
-**You can pull a pre-built image from the Project ASLAN [DockerHub](https://hub.docker.com/r/projaslan/aslan) and skip this step.**  
+**You can pull a pre-built image from the Project Aslan [DockerHub](https://hub.docker.com/r/projaslan/aslan) and skip this step.**  
 
-To build a docker image locally, execute the following script. It may take a few minutes:
+To build a docker image locally (default image name: aslan_docker), execute the following script. It may take a few minutes:
 ```
 cd aslan_docker/
 ./build.bash
 ```
 
-## Run ASLAN docker
+## Run Aslan docker
 
 Pull and run a docker image from the DockerHub:
 ```
