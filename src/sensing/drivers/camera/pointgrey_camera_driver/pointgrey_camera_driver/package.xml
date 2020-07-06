@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>pointgrey_camera_driver</name>
-  <version>0.13.4</version>
+  <version>0.14.1</version>
   <description>Point Grey camera driver based on libflycapture2.</description>
 
   <maintainer email="mpurvis@clearpathrobotics.com">Mike Purvis</maintainer>

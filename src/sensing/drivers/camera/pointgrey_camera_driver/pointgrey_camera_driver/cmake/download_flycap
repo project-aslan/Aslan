@@ -1,7 +1,10 @@
+#!/usr/bin/env python
+#
 # Software License Agreement (BSD)
 #
 # @author    Mike Purvis <mpurvis@clearpathrobotics.com>
-# @copyright (c) 2014, Clearpath Robotics, Inc., All rights reserved.
+# @author    Chris Iverach-Brereton <civerachb@clearpathrobotics.com>
+# @copyright (c) 2014-2020, Clearpath Robotics, Inc., All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that
 # the following conditions are met:
@@ -20,6 +23,9 @@
 # HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+#
+# @usage    download_flycap arch library_dest os_code_name
+#           e.g. download_flyap x64_64 /path/to/somewhere xenial
 
 import cookielib
 import cStringIO
@@ -34,58 +40,87 @@ import os
 
 logging.basicConfig(level=logging.INFO)
 
-LOGIN_URL = 'https://www.ptgrey.com/login'
-LOGIN_DATA = {
-    'Email': 'code@clearpathrobotics.com',
-    'Password': 'uNjRxoH6NMsJvi6hyPCH'
-    }
+URL_TEMPLATES = {
+    'deb': 'https://packages.clearpathrobotics.com/stable/flir/Flycap2/flycapture2-2.13.3.31-{arch}-pkg_Ubuntu{version}.tgz',
+    'src': 'https://packages.clearpathrobotics.com/stable/flir/Flycap2/flycapture.2.13.3.31_{arch}_Ubuntu{version}.tar.gz'
+}
 
 ARCHS = {
     'x86_64': {
-        'current': (
-            'https://www.ptgrey.com/support/downloads/10767/', (
-                'flycapture2-2.11.3.121-amd64/libflycapture-2.11.3.121_amd64.deb',
-                'flycapture2-2.11.3.121-amd64/libflycapture-2.11.3.121_amd64-dev.deb'),
-            'usr/lib/libflycapture.so.2.11.3.121'),
-        'legacy': (
-            'https://www.ptgrey.com/support/downloads/10617/', (
-                'flycapture2-2.9.3.43-amd64/libflycapture-2.9.3.43_amd64.deb',
-                'flycapture2-2.9.3.43-amd64/libflycapture-2.9.3.43_amd64-dev.deb'),
-            'usr/lib/libflycapture.so.2.9.3.43')},
+        'linux_arch': 'amd64',
+        'current': '16.04',
+        'future': '18.04',
+        'type': 'deb',
+        'debs': [
+            'flycap-2.13.3.31_amd64.deb',
+            'flycapture-doc-2.13.3.31_amd64.deb',
+            'libflycapture-2.13.3.31_amd64.deb',
+            'libflycapture-2.13.3.31_amd64-dev.deb',
+            'libflycapture-c-2.13.3.31_amd64.deb',
+            'libflycapture-c-2.13.3.31_amd64-dev.deb',
+            'libflycapturegui-2.13.3.31_amd64.deb',
+            'libflycapturegui-2.13.3.31_amd64-dev.deb',
+            'libflycapturegui-c-2.13.3.31_amd64.deb',
+            'libflycapturegui-c-2.13.3.31_amd64-dev.deb',
+            'libflycapturevideo-2.13.3.31_amd64.deb',
+            'libflycapturevideo-2.13.3.31_amd64-dev.deb',
+            'libflycapturevideo-c-2.13.3.31_amd64.deb',
+            'libflycapturevideo-c-2.13.3.31_amd64-dev.deb',
+            'libmultisync-2.13.3.31_amd64.deb',
+            'libmultisync-c-2.13.3.31_amd64.deb',
+            'updatorgui-2.13.3.31_amd64.deb'
+        ],
+        'shared_library': 'usr/lib/libflycapture.so.2.13.3.31',
+        'folder_name': 'flycapture2-2.13.3.31-amd64'
+    },
     'i386': {
-        'current': (
-            'https://www.ptgrey.com/support/downloads/10768/', (
-                'flycapture2-2.11.3.121-i386/libflycapture-2.11.3.121_i386.deb',
-                'flycapture2-2.11.3.121-i386/libflycapture-2.11.3.121_i386-dev.deb'),
-            'usr/lib/libflycapture.so.2.11.3.121'),
-        'legacy': (
-            'https://www.ptgrey.com/support/downloads/10619/', (
-                'flycapture2-2.9.3.43-i386/libflycapture-2.9.3.43_i386.deb',
-                'flycapture2-2.9.3.43-i386/libflycapture-2.9.3.43_i386-dev.deb'),
-            'usr/lib/libflycapture.so.2.9.3.43')},
+        'linux_arch': 'i386',
+        'current': '16.04',
+        'type': 'deb',
+        'debs': [
+            'flycap-2.13.3.31_i386.deb',
+            'flycapture-doc-2.13.3.31_i386.deb',
+            'libflycapture-2.13.3.31_i386.deb',
+            'libflycapture-2.13.3.31_i386-dev.deb',
+            'libflycapture-c-2.13.3.31_i386.deb',
+            'libflycapture-c-2.13.3.31_i386-dev.deb',
+            'libflycapturegui-2.13.3.31_i386.deb',
+            'libflycapturegui-2.13.3.31_i386-dev.deb',
+            'libflycapturegui-c-2.13.3.31_i386.deb',
+            'libflycapturegui-c-2.13.3.31_i386-dev.deb',
+            'libflycapturevideo-2.13.3.31_i386.deb',
+            'libflycapturevideo-2.13.3.31_i386-dev.deb',
+            'libflycapturevideo-c-2.13.3.31_i386.deb',
+            'libflycapturevideo-c-2.13.3.31_i386-dev.deb',
+            'libmultisync-2.13.3.31_i386.deb',
+            'libmultisync-c-2.13.3.31_i386.deb',
+            'updatorgui-2.13.3.31_i386.deb'
+        ],
+        'shared_library': 'usr/lib/libflycapture.so.2.13.3.31',
+        'folder_name': 'flycapture2-2.13.3.31-i386'
+    },
     'armv7': {
-        'current': (
-            'https://www.ptgrey.com/support/downloads/10766/',
-            'flycapture.2.11.3.121_armhf',
-            'usr/lib/libflycapture.so.2.11.3.121'),
-        'legacy': (
-            'https://www.ptgrey.com/support/downloads/10618/',
-            'flycapture.2.9.3.43_armhf',
-            'usr/lib/libflycapture.so.2.9.3.43')},
+        'linux_arch': 'armhf',
+        'current': '16.04',
+        'future': '18.04',
+        'type': 'src',
+        'shared_library': 'usr/lib/libflycapture.so.2.13.3.31',
+        'folder_name': 'flycapture.2.13.3.31_armhf'
+    },
     'armv8': {
-        'current': (
-            'https://www.ptgrey.com/support/downloads/10765/',
-            'flycapture.2.11.3.121_arm64',
-            'usr/lib/libflycapture.so.2.11.3.121'),
-        'legacy': (
-            'https://www.ptgrey.com/support/downloads/10616/',
-            'flycapture.2.9.3.43_arm64',
-            'usr/lib/libflycapture.so.2.9.3.43')}
+        'linux_arch': 'arm64',
+        'current': '16.04',
+        'future': '18.04',
+        'type': 'src',
+        'shared_library': 'usr/lib/libflycapture.so.2.13.3.31',
+        'folder_name': 'flycapture.2.13.3.31_arm64'
+    }
 }
+
 OS_LIBRARY_VERSION = {
-  'trusty': 'legacy',
-  'jessie': 'legacy',
-  'xenial': 'current'
+  'jessie': 'current',
+  'xenial': 'current',
+  'bionic': 'future'
 }
 
 arch, library_dest, os_code_name = sys.argv[1:]
@@ -93,27 +128,20 @@ library_version = OS_LIBRARY_VERSION.get(os_code_name, 'current')
 
 logging.info("CPU architecture is %s", arch)
 logging.info("OS code name is %s", os_code_name)
-if arch.startswith('arm'):
-    archive_url, folder_name, shared_library = ARCHS[arch][library_version]
-else:
-    archive_url, debs, shared_library = ARCHS[arch][library_version]
+archive_url = URL_TEMPLATES[ARCHS[arch]['type']].format(arch=ARCHS[arch]['linux_arch'], version=ARCHS[arch][library_version])
 
-logging.info("Logging into ptgrey.com.")
+logging.info("Downloading SDK archive from {0}...".format(archive_url))
 cj = cookielib.CookieJar()
 opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-opener.addheaders = [
-    ('User-agent', 'Mozilla/5.0'),
-    ('Referer', 'https://www.ptgrey.com')]
-opener.open(LOGIN_URL, urllib.urlencode(LOGIN_DATA))
-
-logging.info("Downloading SDK archive.")
 resp = opener.open(archive_url)
 
-logging.info("Unpacking tarball.")
+logging.info('Unpacking tarball...')
 with tarfile.open(mode="r:gz", fileobj=cStringIO.StringIO(resp.read())) as tar:
     tar.extractall()
 
-if arch.startswith('arm'):
+if ARCHS[arch]['type'] == 'src':
+    shared_library = ARCHS[arch]['shared_library']
+    folder_name = ARCHS[arch]['folder_name']
     logging.info("Copying ARM libs from: %s to %s", shared_library, library_dest)
 
     # Creating (current_folder)/usr folder to eliminate need for if branching in
@@ -134,14 +162,16 @@ if arch.startswith('arm'):
     os.mkdir(os.path.join(include_path, flycap_folder))
 
     for files in include_files:
-	if files.endswith(".h"):
+        if files.endswith(".h"):
             shutil.move(os.path.join(include_path, files), os.path.join(include_path, flycap_folder))
 
-    shutil.copyfile(shared_library, library_dest)
 else:
+    debs = ARCHS[arch]['debs']
+    folder_name = ARCHS[arch]['folder_name']
+
     for deb in debs:
         logging.info("Extracting: %s", deb)
-    	subprocess.check_call(['dpkg', '--extract', deb, '.'])
+        subprocess.check_call(['dpkg', '--extract', os.path.join(folder_name, deb), '.'])
 
-    logging.info("Copying shared library.")
-    shutil.copyfile(shared_library, library_dest)
+logging.info("Copying shared library.")
+shutil.copyfile(ARCHS[arch]['shared_library'], library_dest)

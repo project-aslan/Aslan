@@ -76,9 +76,9 @@ if(${CMAKE_SYSTEM_PROCESSOR} MATCHES x86_64 OR x86_32)
     include_directories(
       ${PROJECT_INCLUDE_DIR}
       ${catkin_INCLUDE_DIRS}
-      ${SPINNAKER_INCLUDE_DIR}
-      ${OpenCV_INCLUDE_DIRS}
-      ${Boost_INCLUDE_DIR}
+      SYSTEM ${SPINNAKER_INCLUDE_DIR}
+      SYSTEM ${OpenCV_INCLUDE_DIRS}
+      SYSTEM ${Boost_INCLUDE_DIR}
       ${LibUnwind_INCLUDE_DIRS}
     )
 
@@ -97,9 +97,9 @@ if(${CMAKE_SYSTEM_PROCESSOR} MATCHES aarch64 OR arm)
     include_directories(
       ${PROJECT_INCLUDE_DIR}
       ${catkin_INCLUDE_DIRS}
-      ${SPINNAKER_INCLUDE_DIR}
-      ${OpenCV_INCLUDE_DIRS}
-      ${Boost_INCLUDE_DIR}
+      SYSTEM ${SPINNAKER_INCLUDE_DIR}
+      SYSTEM ${OpenCV_INCLUDE_DIRS}
+      SYSTEM ${Boost_INCLUDE_DIR}
     )
 
     link_directories( ${SPINNAKER_LIB_DIR} )

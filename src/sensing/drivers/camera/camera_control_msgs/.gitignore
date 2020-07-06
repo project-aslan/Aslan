@@ -1,0 +1,13 @@
+#############
+## folders ##
+#############
+build
+
+#############
+##  files  ##
+#############
+*.*~
+*.*user.*
+*.user
+*.autosave
+CATKIN_IGNORE
