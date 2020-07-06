@@ -13,3 +13,7 @@
 [submodule "src/sensing/drivers/camera/zed-ros-wrapper"]
 	path = src/sensing/drivers/camera/zed-ros-wrapper
 	url = https://github.com/stereolabs/zed-ros-wrapper
+[submodule "src/sensing/drivers/lidar/velodyne"]
+	path = src/sensing/drivers/lidar/velodyne
+	url = https://github.com/project-aslan/velodyne
+	branch = aslan-dev
