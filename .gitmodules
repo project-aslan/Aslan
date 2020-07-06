@@ -21,3 +21,7 @@
 	path = src/autoware.ai
 	url = https://github.com/project-aslan/autoware.ai
 	branch = aslan-dev
+[submodule "src/sensing/drivers/lidar/ouster_example"]
+	path = src/sensing/drivers/lidar/ouster_example
+	url = https://github.com/project-aslan/ouster_example
+	branch = aslan-dev
