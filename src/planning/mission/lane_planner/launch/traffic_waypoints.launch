@@ -1,5 +1,0 @@
-<launch>
-    <node pkg="lane_planner" type="traffic_waypoints" name="traffic_waypoints" output="log">
-</node>
-
-</launch>

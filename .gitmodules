@@ -17,3 +17,7 @@
 	path = src/sensing/drivers/lidar/velodyne
 	url = https://github.com/project-aslan/velodyne
 	branch = aslan-dev
+[submodule "src/autoware.ai"]
+	path = src/autoware.ai
+	url = https://github.com/project-aslan/autoware.ai
+	branch = aslan-dev
