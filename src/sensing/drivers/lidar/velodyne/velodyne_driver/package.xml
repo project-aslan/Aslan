@@ -1,7 +1,7 @@
-<package>
-
+<?xml version="1.0"?>
+<package format="2">
   <name>velodyne_driver</name>
-  <version>1.10.0</version>
+  <version>1.5.0</version>
   <description>
     ROS device driver for Velodyne 3D LIDARs.
   </description>
@@ -9,7 +9,7 @@
   <maintainer email="adbelrahman.barghout@streetdrone.com">Abdelrahman Barghouth</maintainer>
   <maintainer email="jwhitley@autonomoustuff.com">Josh Whitley</maintainer>
   <maintainer email="brice.rebsamen@gmail.com">Brice Rebsamen</maintainer>
-  <author> Jack O'Quin</author>
+  <author>Jack O'Quin</author>
   <author>Patrick Beeson</author>
   <author>Michael Quinlan</author>
   <author>Yaxin Liu </author>
