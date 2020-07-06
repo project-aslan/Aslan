@@ -96,7 +96,8 @@ rosdep update
 
 ```
 git clone --recurse-submodules https://github.com/project-aslan/Aslan.git
-# if you haven't previously included the flags for the the submodules, do:
+
+# if you haven't initialized and updated the submodules with --recurse-submodules when cloning, do:
 cd Aslan/
 git submodule update --init --recursive
 ```
