@@ -1,4 +1,3 @@
-Featurelog
 
 ```
 aslan_docker: Aslan docker container linking to projaslan/aslan in Dockerhub 

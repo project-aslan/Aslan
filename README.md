@@ -92,10 +92,11 @@ sudo rosdep init
 rosdep update
 ```
 
-#### 3. Clone the Project ASLAN repository
+#### 3. Clone the Project ASLAN repository with submodules
 
 ```
-git clone https://github.com/project-aslan/Aslan.git
+git clone --recurse-submodules https://github.com/project-aslan/Aslan.git
+git submodule update --init --recursive
 ```
 
 #### 4. Install additional dependencies
