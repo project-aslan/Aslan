@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>statistics_msgs</name>
-  <version>0.13.4</version>
+  <version>0.14.1</version>
   <description>Messages related to the Point Grey camera driver.</description>
 
   <maintainer email="mpurvis@clearpathrobotics.com">Mike Purvis</maintainer>

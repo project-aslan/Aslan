@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>pointgrey_camera_description</name>
-  <version>0.13.4</version>
+  <version>0.14.1</version>
   <description>URDF descriptions for Point Grey cameras</description>
 
   <maintainer email="tbaltovski@clearpathrobotics.com">Tony Baltovski</maintainer>
