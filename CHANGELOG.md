@@ -104,12 +104,12 @@ src
 │   |	The node lane_select is included in Autoware.ai 1.10.0.
 |   |     
 |   └───motion
-|       └───astar_planner: Included in Autoware.ai 1.10.0. Changes made:
-│       │   Changes made:
+|       └───astar_planner: Included in Autoware.ai 1.10.0.
+│       │   Added features and changes made:
 │       │     * velocity_set parameters: Added radar detection configuration parameters, added current_velocity 
 │       │     input topic configuration, added obstacle detection configuration parameters, specified
 │       │     default parameters configuration after on-vehicle testing, removed crosswalk detection.
-│       │     * velocity_set added features: 
+│       │     * velocity_set: 
 |       |         * [Feature] Configurable speed input topic
 │       │         * [Feature] Radar obstacle detection
 │       │         * [Feature] Emergency reaction to obstacle detection from radar 
@@ -117,7 +117,8 @@ src
 │       │         * [Feature] Emergency stop, obstacle detection, obstacle removed
 │       │         * Doesn't include support for vector maps and crosswalk detection
 │       │     
-|       └───waypoint_follower: Included in Autoware.ai 1.10.0. Added features and changes made:
+|       └───waypoint_follower: Included in Autoware.ai 1.10.0. 
+│       │     Added features and changes made:
 │       │     * [Feature] pure_pursuit: Vehicle speed conditioning to fit the requirements of 
 │       │     Project-Aslan: 9mps speed cap.
 │       │     * [Feature] twist_filter: Obstacle removed callback, added zero_twist counter after 
@@ -151,23 +152,23 @@ src
     |  └───lidar
     |  |   └───ouster: Originally provided by ouster-lidar 
     |  |   |		(https://github.com/ouster-lidar/ouster_example). Changes made:
-    |  |   |      		* Remapped the lidar topics topic to /points_raw
+    |  |   |    * Remapped the lidar topics topic to /points_raw
     |  |   |  
     |  |   └───velodyne: Originally provided by Austin Robot Technology 
     |  |     		(https://github.com/ros-drivers/velodyne). Changes made:
-    |  |           * Project-Aslan only includes the lidars that have been tested and proven successful with the stack. 
-    |  |        	  These are the sensors: Velodyne-VLP16 and VLP-32.
+    |  |        * Project-Aslan only includes the lidars that have been tested and proven successful with the stack. 
+    |  |          These are the sensors: Velodyne-VLP16 and VLP-32.
     |  |   
     |  └───radar
-    |   	└───umrr_driver: Originally provided by Smartmicro (https://www.smartmicro.com/downloads)
+    |      └───umrr_driver: Originally provided by Smartmicro (https://www.smartmicro.com/downloads)
     | 
     └───filters
         └───ray_ground_filter: Originally included in Autoware.ai 1.10.0 under points_preprosessor. 
         |    Changes made:
-        |   * Parameters calibration from on-vehicle testing
+        |    * Parameters calibration from on-vehicle testing
         |
         └───voxel_grid_filter: Originally included in Autoware.ai 1.10.0 under points_downsampler. 
-         Changes made:
-           * Parameters calibration from on-vehicle testing
+             Changes made:
+             * Parameters calibration from on-vehicle testing
 _
 ```
