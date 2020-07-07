@@ -95,7 +95,11 @@ rosdep update
 #### 3. Clone the Project ASLAN repository
 
 ```
-git clone https://github.com/project-aslan/Aslan.git
+git clone --recurse-submodules https://github.com/project-aslan/Aslan.git
+
+# if you haven't initialized and updated the submodules with --recurse-submodules when cloning, do:
+cd Aslan/
+git submodule update --init --recursive
 ```
 
 #### 4. Install additional dependencies
