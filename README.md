@@ -37,8 +37,8 @@ Used for trials on real-world automated vehicles.
 - Quick start resources: [rosbag](https://www.dropbox.com/s/50tljbponc4euas/siliconosney.bag?dl=0), [point cloud map](https://www.dropbox.com/s/he2d1ax3em7bkis/siliconosney.pcd?dl=0) and [waypoints csv](https://www.dropbox.com/s/ys9c5stu5vo1bkr/siliconosney.csv?dl=0)
 
 **Originally suggested at autoware.ai, tag: 1.10.0.  
-These packages have been configured and modified significantly to fit the requirements of Project ASLAN.*
-Complete Feature Log [here](https://github.com/project-aslan/Aslan/blob/master/FEATURELOG.md)
+These packages have been configured and modified significantly to fit the requirements of Project ASLAN.*   
+Complete Feature Log, available [here](https://github.com/project-aslan/Aslan/blob/master/FEATURELOG.md)
 
 ## Recommended System
 
