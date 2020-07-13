@@ -17,22 +17,28 @@ Used for trials on real-world automated vehicles.
 
 - Graphics User Interface (GUI) with integrated ROS tools
 - Docker and Source Code installation
-- Vehicle Model basic urdf for RVIZ
 - Multiple Sensors Drivers
-- Normal Distribution Transform (NDT)* for localization and mapping
-- Voxel Grid and Ground Removal point cloud filtering
-- Path Planning* based on waypoints
+- High level supervisor node, monitoring the heath of the system and publishing diagnostics
 - Object Detection using LiDAR and Radar
-- Route Planning* Algorithm based on A* Planner
-- High-level supervisor/monitor node
-- Vehicle Interface using SocketCAN
-- Gazebo simulation model and worlds: 3 ways of controlling the robot
+- Emergency stop reaction
+- Vehicle Interface acting as a bridge between ROS and the embedded vehicle controllers.
+- PID/Feedforward linear velocity feedback loop
+- Tunable yaw to steering percentage conversion map
+- Integrated Gazebo simulation model
+- 3 ways of simulation control: Aslan software, keyboard and joystick controllers
+- Vehicle Models visualization and parameters description
+- On-vehicle software testing and evaluation as well as parameters configuration
+- Normal Distribution Transform (NDT)* for localization and mapping
+- Voxel Grid and Ground Removal * point cloud filtering
+- Route planning using waypoints *
+- Path Planning based on A* Planner
 - Comprehensive documentation of the source code in the repo and inside the GUI
 - Online [tutorials](https://www.youtube.com/channel/UCnZLHdQ-KIL8RxWVrcbLSZg/videos)
 - Quick start resources: [rosbag](https://www.dropbox.com/s/50tljbponc4euas/siliconosney.bag?dl=0), [point cloud map](https://www.dropbox.com/s/he2d1ax3em7bkis/siliconosney.pcd?dl=0) and [waypoints csv](https://www.dropbox.com/s/ys9c5stu5vo1bkr/siliconosney.csv?dl=0)
 
-**Originally suggested at Autoware 1.10.0.  
-These packages have been configured and modified significantly to fit the requirements of Project ASLAN.*
+**Originally suggested at autoware.ai, tag: 1.10.0.  
+These packages have been configured and modified significantly to fit the requirements of Project ASLAN.*   
+Complete Feature Log, available [here](https://github.com/project-aslan/Aslan/blob/master/FEATURELOG.md)
 
 ## Recommended System
 
@@ -92,7 +98,7 @@ sudo rosdep init
 rosdep update
 ```
 
-#### 3. Clone the Project ASLAN repository
+#### 3. Clone the Project ASLAN repository with submodules
 
 ```
 git clone --recurse-submodules https://github.com/project-aslan/Aslan.git

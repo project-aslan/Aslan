@@ -94,7 +94,7 @@ RUN sudo rosdep init \
 # Install Aslan
 RUN cd && mkdir /home/$USERNAME/Aslan
 COPY --chown=aslan_user ./ /home/$USERNAME/Aslan/
-RUN /bin/bash -c 'source /opt/ros/kinetic/setup.bash; cd /home/$USERNAME/Aslan/src; catkin_init_workspace; cd ../; rosdep install -y --from-paths /home/$USERNAME/Aslan/src --ignore-src -r --rosdistro kinetic; catkin build'
+RUN /bin/bash -c 'source /opt/ros/kinetic/setup.bash; cd /home/$USERNAME/Aslan/src; git submodule update --init --recursive; catkin_init_workspace; cd ../; rosdep install -y --from-paths /home/$USERNAME/Aslan/src --ignore-src -r --rosdistro kinetic; catkin build'
 RUN echo "source /home/$USERNAME/Aslan/devel/setup.bash" >> /home/$USERNAME/.bashrc
 
 # Setting
