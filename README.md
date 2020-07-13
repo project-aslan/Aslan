@@ -17,8 +17,6 @@ Used for trials on real-world automated vehicles.
 
 - Graphics User Interface (GUI) with integrated ROS tools
 - Docker and Source Code installation
-- Vehicle Models visualization and vehicles description
-- On-vehicle software testing and configuration
 - Multiple Sensors Drivers
 - High level supervisor node, monitoring the heath of the system and publishing diagnostics
 - Object Detection using LiDAR and Radar
@@ -28,6 +26,8 @@ Used for trials on real-world automated vehicles.
 - Tunable yaw to steering percentage conversion map
 - Integrated Gazebo simulation model
 - 3 ways of simulation control: Aslan software, keyboard and joystick controllers
+- Vehicle Models visualization and parameters description
+- On-vehicle software testing and evaluation as well as parameters configuration
 - Normal Distribution Transform (NDT)* for localization and mapping
 - Voxel Grid and Ground Removal * point cloud filtering
 - Route planning using waypoints *
