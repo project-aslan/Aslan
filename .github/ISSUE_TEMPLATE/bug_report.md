@@ -22,7 +22,7 @@ A clear description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Sytem (please complete the following information):**
+**System (please complete the following information):**
  - OS: [e.g. Ubuntu 16.04]
  - ASLAN Version: [e.g. 1.0.0]
  - ROS Version: [e.g. kinetic]
@@ -30,3 +30,8 @@ If applicable, add screenshots to help explain your problem.
 
 **Additional context**
 Add any other context about the problem here.
+
+[comment]: # (In the case of urgent feedback needed, assign this issue to yourself and one of the core developers:)
+[comment]: # (EfimiaPanagiotaki-StreetDrone)
+[comment]: # (AbdelrahmanBarghouth-StreetDrone)
+[comment]: # (FionanOSullivan-StreetDrone)

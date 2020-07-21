@@ -142,6 +142,10 @@ To start the Project ASLAN GUI, simply execute the bash script:
   <img src="docs/img3.png" width="310" />
 </p>
 
+## Contributing
+
+Please take a moment to review the [Contribution Guidelines](https://github.com/project-aslan/Aslan/blob/master/CONTRIBUTING.md) in order to make the contribution process easy and effective. The issue tracker is the preferred channel for bug reports, feature requests and when working on new features implementation.
+
 ## Additional Resources
 Project Aslan Dockerhub: [projaslan/aslan](https://hub.docker.com/r/projaslan/aslan)  
 
