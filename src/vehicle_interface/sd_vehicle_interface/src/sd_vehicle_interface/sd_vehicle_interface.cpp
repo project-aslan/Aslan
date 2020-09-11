@@ -91,7 +91,7 @@ int main(int argc, char **argv)
 	ros::NodeHandle private_nh("~");
 
 	private_nh.param<string>("sd_vehicle", _sd_vehicle, "env200");
-	private_nh.param<string>("sd_gps_imu", _sd_speed_source, "oxts");
+	private_nh.param<string>("sd_gps_imu", _sd_gps_imu, "oxts");
 	private_nh.param<string>("sd_speed_source", _sd_speed_source, "vehicle_can");
 	private_nh.param<bool>("sd_simulation_mode", _sd_simulation_mode, false); 
 
@@ -160,7 +160,7 @@ int main(int argc, char **argv)
 			
     if (AutomationGranted_B || _sd_simulation_mode){
 			
-			if (0 ==(AliveCounter_Z % CONTROL_LOOP)){ //We only run as per calibrated frequency 
+			if (0 ==(AliveCounter_Z - 5 % CONTROL_LOOP)){ //We only run as per calibrated frequency, less an offset to prevent torque/steer immedietaly being applied on entry to autonomous mode. 
 			
 				//Calculate Steer and torque values, as well as controll feedback (PID and FeedForward Contributions to Torque Controller)
 				FinalDBWSteerRequest_Pc   = speedcontroller::CalculateSteerRequest  (TargetTwistAngular_Degps, CurrentTwistLinearSD_Mps_Final);
