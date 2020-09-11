@@ -159,6 +159,9 @@ Online Tutorials: [Youtube Channel](https://www.youtube.com/channel/UCnZLHdQ-KIL
 A dedicated, trained and attentive safety driver must always be present in the driver's seat at all times and in all environments, monitoring the vehicle.  
 THIS SOFTWARE IS FOR RESEARCH PURPOSES ONLY. YOU ARE RESPONSIBLE FOR COMPLYING WITH LOCAL LAWS AND REGULATIONS. NO WARRANTY EXPRESSED OR IMPLIED. ACCESS TO AND USE OF THIS SOFTWARE IS AT YOUR OWN RISK AND RESPONSIBILITY.  
 
+Project Aslan has been inspired by and was built on top of the Autoware Foundation’s open-source projects. In particular, a number of fundamental technologies have been adopted from Autoware.AI. With StreetDrone’s customisations for its electric vehicle and integration with other third-party drivers, Project Aslan immensely benefits from the Autoware’s projects and the Autoware Foundation members’ contributions.
+
+
 ## License
 
 Aslan Software is licensed under [Apache 2 License](https://github.com/project-aslan/Aslan/blob/master/LICENSE)
