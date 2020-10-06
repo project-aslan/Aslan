@@ -20,8 +20,8 @@ Please follow the safety instructions provided in the documentation you received
 
 Requirements
 ------
-##### - Ubuntu 16.04 LTS
-##### - ROS Kinetic [ros-kinetic-desktop-full](http://wiki.ros.org/kinetic/Installation/Ubuntu)
+##### - Ubuntu 18.04 LTS
+##### - ROS Melodic [ros-melodic-desktop-full](http://wiki.ros.org/melodic/Installation/Ubuntu)
 ##### - Catkin Command Line Tools [catkin_tools](https://catkin-tools.readthedocs.io/en/latest/installing.html)
 
 Architecture
@@ -48,7 +48,7 @@ Building
 
 2. Install the ROS packages: [socketcan_interface](http://wiki.ros.org/socketcan_interface) and [can_msgs](http://wiki.ros.org/can_msgs)
 ```
-sudo apt-get install ros-kinetic-socketcan-interface ros-kinetic-can-msgs
+sudo apt-get install ros-melodic-socketcan-interface ros-melodic-can-msgs
 ```
 
 3. Build the package

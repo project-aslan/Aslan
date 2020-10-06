@@ -8,7 +8,7 @@ In order to build any camera driver, delete the file: "CATKIN_IGNORE" from its d
 ##### 1. pointgrey_camera_driver
 First install the camera driver.
 ```
-sudo apt-get install ros-kinetic-pointgrey-camera-driver
+sudo apt-get install ros-melodic-pointgrey-camera-driver
 ```
 To build this package individually:
 ```

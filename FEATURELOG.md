@@ -85,7 +85,7 @@ Submodule pointing to a fork of autoware.ai open source software for self-drivin
 For the vehicle to accurately estimate its position within an environment, autoware.ai is suggesting a point cloud map-based localisation method which StreetDrone has evaluated in terms of accuracy, resilience to error and noise, coverage and cost, before integrating in Aslan. This localization approach is using the point cloud matching method, Normal Distribution Transform or NDT in which a LiDAR scan from the vehicle is being compared to the LiDAR scan of the map, in order to calculate its position in that map.   
 **Added Features for Aslan:**   
 * The node save_pcd is a Project-Aslan specific development. This package is responsible for saving a point cloud map at a specific path. It's being automatically run inside ndt_mapping.
-* Launch pose_relay and vel_relay from [topic_tools/relay](https://github.com/ros/ros_comm/tree/kinetic-devel/tools) alongside ndt_matching [(http://wiki.ros.org/topic_tools/relay)](http://wiki.ros.org/topic_tools/relay)
+* Launch pose_relay and vel_relay from [topic_tools/relay](https://github.com/ros/ros_comm/tree/melodic-devel/tools) alongside ndt_matching [(http://wiki.ros.org/topic_tools/relay)](http://wiki.ros.org/topic_tools/relay)
 * ndt_matching: Publish predict_pose_error (the difference between ndt_pose and predict_pose)   
 * More information [here](https://github.com/project-aslan/autoware.ai/tree/aslan-dev/localization/packages/lidar_localizer)
 

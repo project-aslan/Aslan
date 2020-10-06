@@ -5,22 +5,16 @@ Gazebo simulation packages for the SD Twizy vehicle
 
 ### Requirements:
 
-##### - Ubuntu 16.04 LTS
-##### - ROS Kinetic [ros-kinetic-desktop-full](http://wiki.ros.org/kinetic/Installation/Ubuntu)
+##### - Ubuntu 18.04 LTS
+##### - ROS Melodic [ros-melodic-desktop-full](http://wiki.ros.org/melodic/Installation/Ubuntu)
 ##### - Catkin Command Line Tools [catkin_tools](https://catkin-tools.readthedocs.io/en/latest/installing.html)
-##### - Gazebo [ros-kinetic-gazebo-ros-pkgs](http://gazebosim.org/tutorials?tut=ros_installing)  
-This model has been tested with Gazebo 7.16.0. Run `gazebo --version` to make sure you have the correct version installed.  
-To update to Gazebo 7.16.0, do:  
-```
-sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
-wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
-sudo apt update && sudo apt upgrade
-```
+##### - Gazebo [ros-melodic-gazebo-ros-pkgs](http://gazebosim.org/tutorials?tut=ros_installing)  
+This model has been tested with Gazebo 9.
 
 ### Setup your workspace:
 #### A. Create a catkin workspace:
 ```
-source /opt/ros/kinetic/setup.bash
+source /opt/ros/melodic/setup.bash
 mkdir -p ~/catkin_ws/src
 cd ~/catkin_ws/
 catkin build
@@ -109,5 +103,5 @@ cd ~/catkin_ws
 roscore
 rviz
 ```
-If you don't have rviz installed, do `sudo apt-get install ros-kinetic-rviz*`.  
+If you don't have rviz installed, do `sudo apt-get install ros-melodic-rviz*`.  
 The configuration file of the SD Twizy is located at `~/catkin_ws/src/streetdrone_model/sd_robot/config/sd_twizy.rviz`

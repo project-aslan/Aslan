@@ -10,6 +10,5 @@ cp ../run ./run
 
 sudo docker build -t aslan_docker .
 
-
 rm -r src
 rm run

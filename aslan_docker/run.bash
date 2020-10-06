@@ -17,4 +17,4 @@ nvidia-docker run \
     -v /dev/input:/dev/input \
     -v /lib/modules:/lib/modules \
     --net=host \
-    projaslan/aslan
+    projaslan/aslan:melodic

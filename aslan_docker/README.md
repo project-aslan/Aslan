@@ -35,7 +35,7 @@ Pull and run a docker image from the DockerHub:
 cd aslan_docker/
 sudo ./run.bash
 ```
-To run another docker image, replace the last line on the `run.bash` script, `projaslan/aslan`,  with the name of the image you would like to run eg. `aslan_docker`.
+To run another docker image, replace the last line on the `run.bash` script, `projaslan/aslan:melodic`,  with the name of the image you would like to run eg. `aslan_docker`.
 
 To open a new terminal from inside the docker:
 ```

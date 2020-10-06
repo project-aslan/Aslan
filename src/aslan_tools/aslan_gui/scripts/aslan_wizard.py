@@ -343,7 +343,7 @@ class MyFrame(aslan_gui.MyFrame):
             wx.CallAfter(self.label_point_cloud_bar.SetLabel, 'OK' if v else '')
 
     def name_get_cond(self, obj, cond=(lambda s: True), def_ret=None):
-        return next((nm for nm in dir(self) if cond(nm) and getattr(self, nm) is obj), def_ret)
+        return next((nm for nm in self.__dict__ if cond(nm) and getattr(self, nm) is obj), def_ret)
 
     def __do_layout(self):
         pass
@@ -656,7 +656,7 @@ class MyFrame(aslan_gui.MyFrame):
         return next((grp for grp in self.alias_grps if obj in grp), [])
 
     def name_get(self, obj):
-        return next((nm for nm in dir(self) if getattr(self, nm) is obj), None)
+        return next((nm for nm in self.__dict__ if getattr(self, nm) is obj), None)
 
     def is_toggle_button(self, obj):
         return self.name_get(obj).split('_')[0] == 'button' and getattr(obj, 'GetValue', None)

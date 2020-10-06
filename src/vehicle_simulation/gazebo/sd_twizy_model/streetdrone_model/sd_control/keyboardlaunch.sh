@@ -1,12 +1,12 @@
 #!/bin/bash
 
-dpkg -s ros-kinetic-teleop-twist-keyboard &> /dev/null
+dpkg -s ros-melodic-teleop-twist-keyboard &> /dev/null
 
 if [ $? -ne 0 ]
 
         then
             echo "keyboard control not installed"
-            sudo apt-get install ros-kinetic-teleop-twist-keyboard
+            sudo apt-get install ros-melodic-teleop-twist-keyboard
 
         else
             echo    "keyboard control installed"

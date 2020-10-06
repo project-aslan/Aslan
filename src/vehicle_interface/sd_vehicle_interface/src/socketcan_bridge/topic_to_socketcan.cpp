@@ -34,16 +34,15 @@ namespace socketcan_bridge
   TopicToSocketCAN::TopicToSocketCAN(ros::NodeHandle* nh, ros::NodeHandle* nh_param,
       can::DriverInterfaceSharedPtr driver)
     {
-      can_topic_ = nh->subscribe<can_msgs::Frame>("sent_messages", 100,
-                    boost::bind(&TopicToSocketCAN::msgCallback, this, _1));
+      can_topic_ = nh->subscribe<can_msgs::Frame>("sent_messages", nh_param->param("sent_messages_queue_size", 10),
+                    std::bind(&TopicToSocketCAN::msgCallback, this, std::placeholders::_1));
       driver_ = driver;
     };
 
   void TopicToSocketCAN::setup()
     {
-
       state_listener_ = driver_->createStateListener(
-              can::StateInterface::StateDelegate(this, &TopicToSocketCAN::stateCallback));
+              std::bind(&TopicToSocketCAN::stateCallback, this, std::placeholders::_1));
     };
 
   void TopicToSocketCAN::msgCallback(const can_msgs::Frame::ConstPtr& msg)
@@ -66,6 +65,7 @@ namespace socketcan_bridge
         ROS_ERROR("Invalid frame from topic: id: %#04x, length: %d, is_extended: %d", m.id, m.dlc, m.is_extended);
         return;
       }
+
       bool res = driver_->send(f);
       if (!res)
       {

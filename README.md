@@ -47,8 +47,8 @@ Complete Feature Log, available [here](https://github.com/project-aslan/Aslan/bl
 
 ## Requirements
 
-##### - Ubuntu 16.04 LTS
-##### - ROS Kinetic [ros-kinetic-desktop-full](http://wiki.ros.org/kinetic/Installation/Ubuntu)
+##### - Ubuntu 18.04 LTS
+##### - ROS Melodic [ros-melodic-desktop-full](http://wiki.ros.org/melodic/Installation/Ubuntu)
 ##### - Catkin Command Line Tools [catkin_tools](https://catkin-tools.readthedocs.io/en/latest/installing.html)
 
 
@@ -61,8 +61,8 @@ Search for Software & Updates and click on 'Other Software'.
 Tick the boxes allowing  software updates from 'canonical partners' and 'source code'.  
 Press reload and enter your sudo password
 
-#### 2. Install ROS Kinetic Desktop Full
-For more information please visit [here](http://wiki.ros.org/kinetic/Installation/Ubuntu )
+#### 2. Install ROS Melodic Desktop Full
+For more information please visit [here](http://wiki.ros.org/melodic/Installation/Ubuntu )
 
 Setup your computer to accept software from packages.ros.org.
 ```
@@ -78,14 +78,14 @@ Update debian package index
 sudo apt-get update
 ```
 
-Install ROS Kinetic Desktop Full
+Install ROS Melodic Desktop Full
 ```
-sudo apt-get install ros-kinetic-desktop-full
+sudo apt-get install ros-melodic-desktop-full
 ```
 
 Set up your environment
 ```
-echo "source /opt/ros/kinetic/setup.bash" >> ~/.bashrc
+echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 ```
 Install additional tools
