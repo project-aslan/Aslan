@@ -2,6 +2,7 @@
  * Copyright (C) 2020 StreetDrone Limited - All rights reserved
  * 
  * Author: Fionán O'Sullivan
+ * (co)Author: Abdelrahman Barghout
  *
  * Based on original work of: Efimia Panagiotaki
  * Redistribution and use in source and binary forms, with or without
@@ -28,8 +29,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  */
- 
- using namespace std;
+#include <can_msgs/Frame.h>
+#include "aslan_msgs/SDControl.h"
+#include "geometry_msgs/TwistStamped.h"
+#include "sensor_msgs/NavSatFix.h"
+#include "sensor_msgs/Imu.h"
 //*****CONSTANTS*****
 
 //Constants
@@ -43,10 +47,13 @@
 #define CONTROL_LOOP (20) //The number of cycles that are counted for ever control loop cycle. 200/20 = 5Hz.
  
  //*****VARIABLES*****
+class sd_vehicle_interface
+{
+public:
 double CurrentTwistLinearCANImu_Mps = 0.0;		//Current Twist Linear in Mps, as read from the CAN bus from the GPS/IMU
 double CurrentTwistLinearSD_Mps_Final = 0.0;	//The speed used within the control functions. Specified at launch wether this is based on vehicle can, IMU, or localisation.  
 double CurrentTwistLinearCANSD_Mps = 0.0; 		//Current Twist Linear in Mps, as read from the CAN bus from the StreetDrone XCU
-double CurrentTwistLinearNDT_Mps = 0.0;			//Current Twist Linear in Mps, as reported by NDT locolisation
+double CurrentTwistLinearNDT_Mps = 0.0;			//Current Twist Linear in Mps, as reported by NDT localisation
 double GPS_Latitude = 0.0;								//latitude, as read from the CAN bus
 double GPS_Longitude = 0.0;								//latitude, as read from the CAN bus
 double IMU_Angle_X =0;
@@ -86,22 +93,31 @@ ros::Publisher current_IMU_pub;
 ros::Publisher sd_control_pub;
 
 
-static string _sd_vehicle;
-static string _sd_gps_imu;
-static string _sd_speed_source; 
-static bool _sd_simulation_mode;
+std::string _sd_vehicle;
+std::string _sd_gps_imu;
+std::string _sd_speed_source; 
+bool _sd_simulation_mode;
 
-static string twizy_string = "twizy";
+std::string twizy_string = "twizy";
 
-static string oxts_string = "oxts";
-static string peak_string = "peak";
-static string no_imu_string = "none";
+std::string oxts_string = "oxts";
+std::string peak_string = "peak";
+std::string no_imu_string = "none";
 
-static string vehicle_can_speed_string = "vehicle_can_speed"; 
-static string imu_speed_string = "imu_speed"; 
-static string ndt_speed_string = "ndt_speed"; 
+std::string vehicle_can_speed_string = "vehicle_can_speed"; 
+std::string imu_speed_string = "imu_speed"; 
+std::string ndt_speed_string = "ndt_speed"; 
 
-
-
-
-
+void ReceivedFrameCANRx_callback(const can_msgs::Frame::ConstPtr& msg); // Callback to listen to Can msgs
+void TwistCommand_callback(const geometry_msgs::TwistStampedConstPtr &msg); // Callback to listen to twist msg and convert it to deg/sec twist
+void CurrentVelocity_callback(const geometry_msgs::TwistStampedConstPtr &msg);// Callback to listen to NDT speed and convert it from mps to kph
+double speedSource(std::string speed_source); // Function to decide if speed is determined by CAN, NDT, or IMU
+sensor_msgs::NavSatFix GPS_setup(sensor_msgs::NavSatFix current_GPS);// Updating GPS signal
+void Twist_setup(geometry_msgs::TwistStamped *current_Twist);// Updating twist signal
+std::string AutonomousControl_setup();// Check if autonomous control is ready
+std::string AutonomousControl_action(aslan_msgs::SDControl *SD_Current_Control); // Perform autonomous Control for car
+std::string SpeedControl(aslan_msgs::SDControl *SD_Current_Control); // Control speed based on vehicle and other attributes
+std::string ChooseVehicle();// Choose whether vehicle is twizy or env200
+void publish_states(geometry_msgs::TwistStamped current_Twist, sensor_msgs::NavSatFix current_GPS, sensor_msgs::Imu current_IMU);// Publishing twist, GPS, and IMU msgs
+int RUN(int argc, char **argv);
+};

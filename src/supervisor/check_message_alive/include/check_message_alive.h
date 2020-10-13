@@ -33,6 +33,18 @@
 #include <string.h>
 #include <time.h>
 
+#include <ros/ros.h>
+#include <std_msgs/Bool.h>
+#include <std_msgs/Int32.h>
+#include <sensor_msgs/PointCloud2.h>
+#include <geometry_msgs/TwistStamped.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <aslan_msgs/Lane.h>
+#include <aslan_msgs/LaneArray.h>
+#include <pcl_conversions/pcl_conversions.h>
+#include <tf2_msgs/TFMessage.h>
+#include <chrono>
+
 class topic_data
 {
 	public:
@@ -45,30 +57,34 @@ class topic_data
 		topic_data(std::string name, bool check_message);
 };
 
+class check_message_alive
+{
+public:
+	void pmap_stat_alive_callback(const std_msgs::Bool::ConstPtr& msg);
+	void filtered_points_alive_callback(const sensor_msgs::PointCloud2::ConstPtr& msg);
+	void ndt_pose_alive_callback(const geometry_msgs::PoseStamped::ConstPtr& msg);
+	void lane_array_alive_callback(const aslan_msgs::LaneArray::ConstPtr& msg);
+	void twist_cmd_alive_callback(const geometry_msgs::TwistStamped::ConstPtr& msg);
+	void twist_raw_alive_callback(const geometry_msgs::TwistStamped::ConstPtr& msg);
+	void points_raw_alive_callback(const sensor_msgs::PointCloud2::ConstPtr& msg);
+	void traffic_array_alive_callback(const aslan_msgs::LaneArray::ConstPtr& msg);
+	void closest_alive_callback(const std_msgs::Int32ConstPtr& msg, VelocitySetPath vs_path);
+	void final_waypoints_callback(const aslan_msgs::LaneConstPtr& msg);
+	void current_pose_callback(const geometry_msgs::PoseStampedConstPtr &msg);
+	void safety_waypoints_callback(const aslan_msgs::LaneConstPtr& msg);
+	void tf_callback(const tf2_msgs::TFMessageConstPtr &msg);
+	void radar_emergency_callback(const std_msgs::Int32::ConstPtr& msg);
+	diagnostic_msgs::DiagnosticStatus get_topic_diagnostics(topic_data topic);
+	diagnostic_msgs::DiagnosticArray generate_diagnostics();
+	int RUN(int argc, char **argv);
 
-diagnostic_msgs::DiagnosticArray aslan_diagnostics_array;
-diagnostic_msgs::DiagnosticStatus aslan_diagnostics_status;
-int seq = 0;
-bool tf_msg1 = true, tf_msg2 = true, tf_msg3 = true;
-bool emergency_flag = false;
-bool end_of_waypoints = false;
-void waypointsCallback(const aslan_msgs::LaneConstPtr& msg);
+	diagnostic_msgs::DiagnosticArray aslan_diagnostics_array;
+	diagnostic_msgs::DiagnosticStatus aslan_diagnostics_status;
+	int seq = 0;
+	bool tf_msg1 = true, tf_msg2 = true, tf_msg3 = true;
+	bool emergency_flag = false;
+	bool end_of_waypoints = false;
+	// void waypointsCallback(const aslan_msgs::LaneConstPtr& msg);
 
-
-topic_data pmap_stat ("pmap_stat", false);
-topic_data filtered_points ("filtered_points", false);
-topic_data ndt_pose ("ndt_pose", false);
-topic_data lane_waypoints_array ("lane_waypoints_array", false);
-topic_data twist_cmd ("twist_cmd", true);
-topic_data twist_raw ("twist_raw", false);
-topic_data points_raw ("points_raw", true);
-topic_data traffic_waypoints_array ("traffic_waypoints_array", false);
-topic_data closest_waypoint ("closest_waypoint", false);
-topic_data final_waypoints ("final_waypoints", false);
-topic_data current_pose ("current_pose", false);
-topic_data safety_waypoints ("safety_waypoints", false);
-topic_data transf ("tf", true);
-
-
-
-int FIXED_ERROR_THRESH = 200; // 200 ms
+	int FIXED_ERROR_THRESH = 200; // 200 ms
+};

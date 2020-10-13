@@ -29,7 +29,7 @@
  *
  */
 
-#include "sd_control.h"
+#include "sd_vehicle_interface/sd_control.h"
 
 namespace speedcontroller{
 	

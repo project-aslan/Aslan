@@ -35,10 +35,10 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(check_message_alive src/check_message_alive.cpp)
+add_executable(check_message_alive src/check_message_alive_main.cpp src/check_message_alive.cpp)
 target_link_libraries(check_message_alive ${catkin_LIBRARIES})
 add_dependencies(check_message_alive ${catkin_EXPORTED_TARGETS})
 
-add_executable(error_listener src/error_listener.cpp)
+add_executable(error_listener src/error_listener_main.cpp src/error_listener.cpp)
 target_link_libraries(error_listener ${catkin_LIBRARIES})
 add_dependencies(error_listener ${catkin_EXPORTED_TARGETS})
