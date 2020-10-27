@@ -28,22 +28,7 @@
  *
  */
 
-#include <ros/ros.h>
-#include <std_msgs/Bool.h>
-#include <std_msgs/Int32.h>
-#include <sensor_msgs/PointCloud2.h>
-#include <geometry_msgs/TwistStamped.h>
-#include <geometry_msgs/PoseStamped.h>
-#include <aslan_msgs/Lane.h>
-#include <aslan_msgs/LaneArray.h>
-#include <diagnostic_msgs/DiagnosticArray.h>
-#include <diagnostic_msgs/DiagnosticStatus.h>
 #include "check_message_alive.h"
-#include <string.h>
-#include <pcl_conversions/pcl_conversions.h>
-#include <tf2_msgs/TFMessage.h>
-
-#include <chrono>
 
 topic_data::topic_data(std::string name, bool check_message)
 {
@@ -53,38 +38,52 @@ topic_data::topic_data(std::string name, bool check_message)
 	check_message = check_message;
 }
 
-void pmap_stat_alive_callback(const std_msgs::Bool::ConstPtr& msg)
+	topic_data pmap_stat ("pmap_stat", false);
+	topic_data filtered_points ("filtered_points", false);
+	topic_data ndt_pose ("ndt_pose", false);
+	topic_data lane_waypoints_array ("lane_waypoints_array", false);
+	topic_data twist_cmd ("twist_cmd", true);
+	topic_data twist_raw ("twist_raw", false);
+	topic_data points_raw ("points_raw", true);
+	topic_data traffic_waypoints_array ("traffic_waypoints_array", false);
+	topic_data closest_waypoint ("closest_waypoint", false);
+	topic_data final_waypoints ("final_waypoints", false);
+	topic_data current_pose ("current_pose", false);
+	topic_data safety_waypoints ("safety_waypoints", false);
+	topic_data transf ("tf", true);
+
+void check_message_alive::pmap_stat_alive_callback(const std_msgs::Bool::ConstPtr& msg)
 {
 	pmap_stat.topic_alive = true;
 	pmap_stat.topic_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
-void filtered_points_alive_callback(const sensor_msgs::PointCloud2::ConstPtr& msg)
+void check_message_alive::filtered_points_alive_callback(const sensor_msgs::PointCloud2::ConstPtr& msg)
 {
 	filtered_points.topic_alive = true;
 	filtered_points.topic_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
-void ndt_pose_alive_callback(const geometry_msgs::PoseStamped::ConstPtr& msg)
+void check_message_alive::ndt_pose_alive_callback(const geometry_msgs::PoseStamped::ConstPtr& msg)
 {
 	ndt_pose.topic_alive = true;
 	ndt_pose.topic_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
-void lane_array_alive_callback(const aslan_msgs::LaneArray::ConstPtr& msg)
+void check_message_alive::lane_array_alive_callback(const aslan_msgs::LaneArray::ConstPtr& msg)
 {
 	lane_waypoints_array.topic_alive = true;
 	lane_waypoints_array.topic_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
-void twist_cmd_alive_callback(const geometry_msgs::TwistStamped::ConstPtr& msg)
+void check_message_alive::twist_cmd_alive_callback(const geometry_msgs::TwistStamped::ConstPtr& msg)
 {
 	twist_cmd.topic_alive = true;
 	twist_cmd.topic_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
 	if(msg->twist.linear.x == 0 && msg->twist.angular.z == 0)
 	{
-		if(emergency_flag || end_of_waypoints)
+		if(check_message_alive::emergency_flag || check_message_alive::end_of_waypoints)
 		{
 			twist_cmd.correct_message = true;
 		}
@@ -99,13 +98,13 @@ void twist_cmd_alive_callback(const geometry_msgs::TwistStamped::ConstPtr& msg)
 	}
 }
 
-void twist_raw_alive_callback(const geometry_msgs::TwistStamped::ConstPtr& msg)
+void check_message_alive::twist_raw_alive_callback(const geometry_msgs::TwistStamped::ConstPtr& msg)
 {
 	twist_raw.topic_alive = true;
 	twist_raw.topic_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
-void points_raw_alive_callback(const sensor_msgs::PointCloud2::ConstPtr& msg)
+void check_message_alive::points_raw_alive_callback(const sensor_msgs::PointCloud2::ConstPtr& msg)
 {
 	points_raw.topic_alive = true;
 	points_raw.topic_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -122,41 +121,41 @@ void points_raw_alive_callback(const sensor_msgs::PointCloud2::ConstPtr& msg)
 	}
 }
 
-void traffic_array_alive_callback(const aslan_msgs::LaneArray::ConstPtr& msg)
+void check_message_alive::traffic_array_alive_callback(const aslan_msgs::LaneArray::ConstPtr& msg)
 {
 	traffic_waypoints_array.topic_alive = true;
 	traffic_waypoints_array.topic_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
-void closest_alive_callback(const std_msgs::Int32ConstPtr& msg, VelocitySetPath vs_path)
+void check_message_alive::closest_alive_callback(const std_msgs::Int32ConstPtr& msg, VelocitySetPath vs_path)
 {
 	closest_waypoint.topic_alive = true;
 	closest_waypoint.topic_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
 	aslan_msgs::Lane lane = vs_path.getPrevWaypoints();
 	if(msg->data >= static_cast<int>(lane.waypoints.size()))
-		end_of_waypoints = true;
+		check_message_alive::end_of_waypoints = true;
 }
 
-void final_waypoints_callback(const aslan_msgs::LaneConstPtr& msg)
+void check_message_alive::final_waypoints_callback(const aslan_msgs::LaneConstPtr& msg)
 {
 	final_waypoints.topic_alive = true;
 	final_waypoints.topic_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
-void current_pose_callback(const geometry_msgs::PoseStampedConstPtr &msg)
+void check_message_alive::current_pose_callback(const geometry_msgs::PoseStampedConstPtr &msg)
 {
 	current_pose.topic_alive = true;
 	current_pose.topic_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
-void safety_waypoints_callback(const aslan_msgs::LaneConstPtr& msg)
+void check_message_alive::safety_waypoints_callback(const aslan_msgs::LaneConstPtr& msg)
 {
 	safety_waypoints.topic_alive = true;
 	safety_waypoints.topic_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
-void tf_callback(const tf2_msgs::TFMessageConstPtr &msg)
+void check_message_alive::tf_callback(const tf2_msgs::TFMessageConstPtr &msg)
 {
 	transf.topic_alive = true;
 	transf.topic_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -167,38 +166,38 @@ void tf_callback(const tf2_msgs::TFMessageConstPtr &msg)
 		{
 			if(msg->transforms[i].header.frame_id.compare("/map") == 0)
 			{
-				tf_msg1 = true;
+				check_message_alive::tf_msg1 = true;
 			}
 			else
 			{
-				tf_msg1 = false;
+				check_message_alive::tf_msg1 = false;
 			}
 		}
 		else if(msg->transforms[i].child_frame_id.compare("/velodyne") == 0)
 		{
 			if(msg->transforms[i].header.frame_id.compare("/base_link") == 0)
 			{
-				tf_msg2 = true;
+				check_message_alive::tf_msg2 = true;
 			}
 			else
 			{
-				tf_msg2 = false;
+				check_message_alive::tf_msg2 = false;
 			}
 		}
 		else if(msg->transforms[i].child_frame_id.compare("/map") == 0)
 		{
 			if(msg->transforms[i].header.frame_id.compare("/world") == 0)
 			{
-				tf_msg3 = true;
+				check_message_alive::tf_msg3 = true;
 			}
 			else
 			{
-				tf_msg3 = false;
+				check_message_alive::tf_msg3 = false;
 			}
 		}
 	}
 
-	if(tf_msg1 && tf_msg2 && tf_msg3)
+	if(check_message_alive::tf_msg1 && check_message_alive::tf_msg2 && check_message_alive::tf_msg3)
 	{
 		transf.correct_message = true;
 	}
@@ -209,63 +208,63 @@ void tf_callback(const tf2_msgs::TFMessageConstPtr &msg)
 
 }
 
-void radar_emergency_callback(const std_msgs::Int32::ConstPtr& msg)
+void check_message_alive::radar_emergency_callback(const std_msgs::Int32::ConstPtr& msg)
 {
 	if(msg->data == 1)
-		emergency_flag = true;
+		check_message_alive::emergency_flag = true;
 }
 
-diagnostic_msgs::DiagnosticStatus get_topic_diagnostics(topic_data topic)
+diagnostic_msgs::DiagnosticStatus check_message_alive::get_topic_diagnostics(topic_data topic)
 {
-	aslan_diagnostics_status.name = topic.topic_name + " topic";
+	check_message_alive::aslan_diagnostics_status.name = topic.topic_name + " topic";
 
 	if(topic.topic_alive)
 	{
 		// if (topic.topic_name.compare("points_raw") == 0) std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() <<std::endl;
-		if(std::abs(topic.topic_time - std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) > FIXED_ERROR_THRESH && topic.topic_name.compare("tf") != 0)
+		if(std::abs(topic.topic_time - std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) > check_message_alive::FIXED_ERROR_THRESH && topic.topic_name.compare("tf") != 0)
 		{
 			ROS_ERROR("%s is not publishing", topic.topic_name.c_str());
-			aslan_diagnostics_status.level = 2;
-			aslan_diagnostics_status.message = "ERROR";
+			check_message_alive::aslan_diagnostics_status.level = 2;
+			check_message_alive::aslan_diagnostics_status.message = "ERROR";
 		}
 		else
 		{
 			if(topic.check_message && !topic.correct_message)
 			{
 				ROS_ERROR("%s has wrong DATA", topic.topic_name.c_str());
-				aslan_diagnostics_status.level = 2;
-				aslan_diagnostics_status.message = "PUBLISHED WRONG DATA";
+				check_message_alive::aslan_diagnostics_status.level = 2;
+				check_message_alive::aslan_diagnostics_status.message = "PUBLISHED WRONG DATA";
 			}
 			else
 			{
-				aslan_diagnostics_status.level = 0;
-				aslan_diagnostics_status.message = "ALIVE AND PUBLISHING";
+				check_message_alive::aslan_diagnostics_status.level = 0;
+				check_message_alive::aslan_diagnostics_status.message = "ALIVE AND PUBLISHING";
 			}
 		}
 	}
 	else
 	{
-		aslan_diagnostics_status.level = 0;
-		aslan_diagnostics_status.message = "DIDN'T START";
+		check_message_alive::aslan_diagnostics_status.level = 0;
+		check_message_alive::aslan_diagnostics_status.message = "DIDN'T START";
 	}
-	return aslan_diagnostics_status;
+	return check_message_alive::aslan_diagnostics_status;
 }
 
-diagnostic_msgs::DiagnosticArray generate_diagnostics()
+diagnostic_msgs::DiagnosticArray check_message_alive::generate_diagnostics()
 {
-	aslan_diagnostics_array.status.clear();
+	check_message_alive::aslan_diagnostics_array.status.clear();
 	int topic_number = 0;
 	topic_data topics[] = {pmap_stat, filtered_points, ndt_pose, lane_waypoints_array, twist_cmd, twist_raw, points_raw, traffic_waypoints_array, 
 	closest_waypoint, final_waypoints, current_pose, safety_waypoints, transf};
 	for(const topic_data &topic : topics)
 	{
-		aslan_diagnostics_status = get_topic_diagnostics(topic);
-		aslan_diagnostics_array.status.push_back(aslan_diagnostics_status);
+		check_message_alive::aslan_diagnostics_status = get_topic_diagnostics(topic);
+		check_message_alive::aslan_diagnostics_array.status.push_back(check_message_alive::aslan_diagnostics_status);
 	}
-	return aslan_diagnostics_array;
+	return check_message_alive::aslan_diagnostics_array;
 }
 
-int main(int argc, char **argv)
+int check_message_alive::RUN(int argc, char **argv)
 {
     ros::init(argc, argv, "check_message_alive");
 
@@ -273,29 +272,29 @@ int main(int argc, char **argv)
     ros::NodeHandle private_nh("~");
     VelocitySetPath vs_path;
 
-    ros::Subscriber pmap_stat_alive_sub = nh.subscribe<std_msgs::Bool>("/pmap_stat", 100, pmap_stat_alive_callback);
-    ros::Subscriber filtered_points_alive_sub = nh.subscribe<sensor_msgs::PointCloud2>("/filtered_points", 100, filtered_points_alive_callback);
-    ros::Subscriber ndt_pose_alive_sub = nh.subscribe("/ndt_pose", 10, ndt_pose_alive_callback);
-    ros::Subscriber lane_array_alive_sub = nh.subscribe("/lane_waypoints_array", 10, lane_array_alive_callback);
-    ros::Subscriber twist_cmd_alive_sub = nh.subscribe("/twist_cmd", 1, twist_cmd_alive_callback);
-    ros::Subscriber twist_raw_alive_sub = nh.subscribe("/twist_raw", 1, twist_raw_alive_callback);
-    ros::Subscriber points_raw_alive_sub = nh.subscribe("/points_raw", 10, points_raw_alive_callback);
-    ros::Subscriber traffic_array_alive_sub = nh.subscribe("/traffic_waypoints_array", 10, traffic_array_alive_callback);
-    ros::Subscriber closest_waypoint_alive_sub = nh.subscribe<std_msgs::Int32>("/closest_waypoint", 10, boost::bind(closest_alive_callback, _1, vs_path));
-    ros::Subscriber final_waypoint_alive_sub = nh.subscribe("/final_waypoints", 10, final_waypoints_callback);
-    ros::Subscriber current_pose_alive_sub = nh.subscribe("/current_pose", 10, current_pose_callback);
-    ros::Subscriber safety_waypoints_alive_sub = nh.subscribe("/safety_waypoints", 1, &safety_waypoints_callback);
+    ros::Subscriber pmap_stat_alive_sub = nh.subscribe<std_msgs::Bool>("/pmap_stat", 100, &check_message_alive::pmap_stat_alive_callback, this);
+    ros::Subscriber filtered_points_alive_sub = nh.subscribe<sensor_msgs::PointCloud2>("/filtered_points", 100, &check_message_alive::filtered_points_alive_callback, this);
+    ros::Subscriber ndt_pose_alive_sub = nh.subscribe("/ndt_pose", 10, &check_message_alive::ndt_pose_alive_callback, this);
+    ros::Subscriber lane_array_alive_sub = nh.subscribe("/lane_waypoints_array", 10, &check_message_alive::lane_array_alive_callback, this);
+    ros::Subscriber twist_cmd_alive_sub = nh.subscribe("/twist_cmd", 1, &check_message_alive::twist_cmd_alive_callback, this);
+    ros::Subscriber twist_raw_alive_sub = nh.subscribe("/twist_raw", 1, &check_message_alive::twist_raw_alive_callback, this);
+    ros::Subscriber points_raw_alive_sub = nh.subscribe("/points_raw", 10, &check_message_alive::points_raw_alive_callback, this);
+    ros::Subscriber traffic_array_alive_sub = nh.subscribe("/traffic_waypoints_array", 10, &check_message_alive::traffic_array_alive_callback, this);
+    ros::Subscriber closest_waypoint_alive_sub = nh.subscribe<std_msgs::Int32>("/closest_waypoint", 10, boost::bind(&check_message_alive::closest_alive_callback, this, _1, vs_path));
+    ros::Subscriber final_waypoint_alive_sub = nh.subscribe("/final_waypoints", 10, &check_message_alive::final_waypoints_callback, this);
+    ros::Subscriber current_pose_alive_sub = nh.subscribe("/current_pose", 10, &check_message_alive::current_pose_callback, this);
+    ros::Subscriber safety_waypoints_alive_sub = nh.subscribe("/safety_waypoints", 1, &check_message_alive::safety_waypoints_callback, this);
     ros::Subscriber waypoints_sub = nh.subscribe("/safety_waypoints", 1, &VelocitySetPath::waypointsCallback, &vs_path);
-    ros::Subscriber tf_alive_sub = nh.subscribe("/tf", 10, tf_callback);
-    ros::Subscriber radar_emergency_sub = nh.subscribe<std_msgs::Int32>("/radar_emergency_stop", 100, radar_emergency_callback);
+    ros::Subscriber tf_alive_sub = nh.subscribe("/tf", 10, &check_message_alive::tf_callback, this);
+    ros::Subscriber radar_emergency_sub = nh.subscribe<std_msgs::Int32>("/radar_emergency_stop", 100, &check_message_alive::radar_emergency_callback, this);
     ros::Publisher aslan_diagnostics_pub = nh.advertise<diagnostic_msgs::DiagnosticArray>("/aslan_diagnostics", 1);
 
     while(ros::ok())
     {
-    	aslan_diagnostics_array.header.stamp = ros::Time::now();
-    	aslan_diagnostics_array.header.seq = seq++;
-    	aslan_diagnostics_array = generate_diagnostics();
-    	aslan_diagnostics_pub.publish(aslan_diagnostics_array);
+    	check_message_alive::aslan_diagnostics_array.header.stamp = ros::Time::now();
+    	check_message_alive::aslan_diagnostics_array.header.seq = check_message_alive::seq++;
+    	check_message_alive::aslan_diagnostics_array = generate_diagnostics();
+    	aslan_diagnostics_pub.publish(check_message_alive::aslan_diagnostics_array);
     	ros::spinOnce();
     }
 }
