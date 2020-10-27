@@ -81,6 +81,8 @@ RUN useradd -m $USERNAME && \
 RUN echo "source /opt/ros/kinetic/setup.bash" >> /home/$USERNAME/.bashrc && \
         #Fix for qt and X server errors
         echo "export QT_X11_NO_MITSHM=1" >> /home/$USERNAME/.bashrc && \
+        #Set ROS hostname to localhost
+        echo "export ROS_HOSTNAME=localhost" >> /home/$USERNAME/.bashrc && \
         # cd to home on login
         echo "cd" >> /home/$USERNAME/.bashrc
 
