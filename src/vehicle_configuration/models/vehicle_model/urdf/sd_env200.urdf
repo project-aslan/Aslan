@@ -6,7 +6,7 @@
     <visual>
       <origin rpy="0 0 3.14" xyz="0.0 1.35 0.0"/>
       <geometry>
-        <mesh filename="package://vehicle_model/mesh/sd_env200.stl" scale="0.01 0.01 0.01"/>
+        <mesh filename="" scale="0.01 0.01 0.01"/>
       </geometry>
       <material name="white"/>
     </visual>
