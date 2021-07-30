@@ -2,9 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [melodic, develop]
+    branches: [melodic, melodic-develop]
   push:
-    branches: [melodic, develop]
+    branches: [melodic, melodic-develop]
 
 jobs:
   build_workspace:
