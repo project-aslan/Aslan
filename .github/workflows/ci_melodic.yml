@@ -26,7 +26,7 @@ jobs:
       - name: Prepare workspace
         run: |
           rosdep update && apt-get update -qqq; \
-          rosdep install -y --from-paths src --ignore-src --rosdistro melodic;
+          rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y --os=ubuntu:xenial;
           
       - name: Build and Test
         run: |
