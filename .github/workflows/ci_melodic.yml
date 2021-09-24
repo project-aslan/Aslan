@@ -21,12 +21,12 @@ jobs:
       options: --user root
     
     steps:
-      - name: Update git
+      - name: Upgrade git
         run: |
           bash -c 'apt-get install -y software-properties-common && apt-get update; \
           add-apt-repository -y ppa:git-core/ppa   && apt-get update; \
           apt-get install -y git'
-          
+
       - uses: actions/checkout@v2
         with:
           submodules: recursive
@@ -39,4 +39,4 @@ jobs:
       - name: Build and Test
         run: |
           bash -c 'source /opt/ros/$ROS_DISTRO/setup.bash; \
-          catkin_make && catkin_make run_tests'
+          catkin_make'
