@@ -22,10 +22,10 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
-    - name: Checkout submodules
-      uses: textbook/git-checkout-submodule-action@melodic
+      - name: Checkout submodules
+        uses: textbook/git-checkout-submodule-action@2.1.1
 
-          - name: Prepare workspace
+      - name: Prepare workspace
         run: |
           rosdep update && apt-get update -qqq; \
           rosdep install -y --from-paths src --ignore-src --rosdistro $ROS_DISTRO;
