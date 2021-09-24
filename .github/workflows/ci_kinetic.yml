@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [kinetic, kinetic-develop]
+  push:
+    branches: [kinetic, kinetic-develop]
+
+jobs:
+  build_workspace:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        ros_distribution: [kinetic]
+    runs-on:  ${{ matrix.os }}
+    
+    container:
+      image: projaslan/aslan:latest
+      env:
+        ROS_DISTRO: kinetic
+      options: --user root
+    
+    steps:
+      - name: Upgrade git
+        run: |
+          bash -c 'apt-get install -y software-properties-common && apt-get update; \
+          add-apt-repository -y ppa:git-core/ppa   && apt-get update; \
+          apt-get install -y git
+
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+        
+      - name: Prepare workspace
+        run: |
+          rosdep update && apt-get update -qqq; \
+          rosdep install -y --from-paths src --ignore-src --rosdistro kinetic;
+          
+      - name: Build and Test
+        run: |
+          bash -c 'source /opt/ros/$ROS_DISTRO/setup.bash; \
+          catkin_make'
