@@ -7,11 +7,11 @@ buttons:
       vehicle_cmd_param :
         func : '[ "twizy" , "env200" ][ self.radio_box_vehicle.GetSelection() ]'
       ins_cmd_param:
-        func: '[ "oxts" , "peak" , "none" ][ self.radio_box_ins.GetSelection() ]'
+        func: '[ "oxts" , "peak" , "none", "carmaker_gps" ][ self.radio_box_ins.GetSelection() ]'
       speed_input_cmd_param:
-        func: '[ "vehicle_can_speed" , "imu_speed" , "ndt_speed" ][ self.radio_box_speed_input.GetSelection() ]'
+        func: '[ "vehicle_can_speed" , "imu_speed" , "ndt_speed", "carmaker_speed" ][ self.radio_box_speed_input.GetSelection() ]'
       mode_cmd_param:
-        func: '[ "false" , "true"][ self.radio_box_run.GetSelection() ]'
+        func: '[ "false" , "true" ][ self.radio_box_run.GetSelection() ]'
       ext_toggle_enables:
         - self.radio_box_vehicle
         - self.radio_box_ins

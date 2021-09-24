@@ -11,6 +11,12 @@ buttons:
         - self.choice_worlds
         - self.checkbox_gaz_rviz
 
+  carmaker_setup:
+    run: roslaunch aslan_gui carmaker_tf.launch
+
+  simtime:
+    run: rosparam set /use_sim_time true
+
 subs:
   subs:
   - name : Joystick Control

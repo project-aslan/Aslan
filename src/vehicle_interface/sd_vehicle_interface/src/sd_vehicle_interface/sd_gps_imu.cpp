@@ -199,18 +199,24 @@ namespace sd{
 					if (ReceivedFrameUnion.byte[6] == 83){
 						GPS_latitude *= -1;
 					}
+					
+					break;
+
 				}
 			case 1570: //0x623
 				{
 					float_bits_converter GPS_Longitude_Minutes_fbc;
 					GPS_Longitude_Minutes_fbc.integer_can =  ReceivedFrameUnion.dword[0];
 
-					GPS_latitude = (GPS_Longitude_Minutes_fbc.float_can/60) + ReceivedFrameUnion.word[2];
+					GPS_longitude = (GPS_Longitude_Minutes_fbc.float_can/60) + ReceivedFrameUnion.word[2];
 
 					//As per PEAK CAN GPS .dbc, 87 represents west.
 					if (ReceivedFrameUnion.byte[6] == 87){
-						GPS_latitude *= -1;
+						GPS_longitude *= -1;
 					}
+					
+					break;
+
 				}
 			}
 		}

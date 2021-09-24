@@ -88,11 +88,11 @@ class MyFrame(aslan_gui.MyFrame):
 
         self.bitmap_1.Destroy()
         self.bitmap_1 = wx.StaticBitmap(self.tab_simulation, wx.ID_ANY,
-                                        wx.Bitmap(src_dir() + 'imgs/sd.jpg', wx.BITMAP_TYPE_ANY))
+                                        wx.Bitmap(src_dir() + 'imgs/epic.png', wx.BITMAP_TYPE_ANY))
 
-        self.bitmap_2.Destroy()
-        self.bitmap_2 = wx.StaticBitmap(self.tab_simulation, wx.ID_ANY,
-                                        wx.Bitmap(src_dir() + 'imgs/park.jpg', wx.BITMAP_TYPE_ANY))
+        # self.bitmap_2.Destroy()
+        # self.bitmap_2 = wx.StaticBitmap(self.tab_simulation, wx.ID_ANY,
+        #                                 wx.Bitmap(src_dir() + 'imgs/park.jpg', wx.BITMAP_TYPE_ANY))
 
         # Configuration tab (Vehicle, Vehicle Info, Vehicle Model, Sensors tree, TF)
 
@@ -608,6 +608,16 @@ class MyFrame(aslan_gui.MyFrame):
                   "2. Launching the Joystick controller. You can map specific buttons for your joystick using the parameters on config, visit http://wiki.ros.org/joy\n" \
                   "3. Launching the Keyboard controller node. Follow the instructions on the pop up terminal window.\n\n" \
                   "For more info, visit: vehicle_simulation/gazebo/sd_twizy_model"
+        self.dialog_info(message)
+
+    def OnInfoIPG(self, event):
+        message = "To use Aslan with IPG CarMaker, you need to have the CarMaker package cloned in your machine. \n\n" \
+                  "repo: https://github.com/IPG-Automotive-UK/Aslan-CarMaker \n\n" \
+                  "Follow the instructions on the README and after launching Aslan from the CarMaker GUI, click on: \n" \
+                  "Simulation Tab -> SimTime \n" \
+                  "Simulation Tab -> TF: Setup \n" \
+                  "Configuration Tab -> TF \n" \
+                  "This will create the appropriate static transformations between the IPG world and the Aslan world"
         self.dialog_info(message)
 
     def dialog_info(self, message):

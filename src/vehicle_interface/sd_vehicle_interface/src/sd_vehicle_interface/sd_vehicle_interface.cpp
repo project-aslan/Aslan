@@ -63,6 +63,8 @@ void ReceivedFrameCANRx_callback(const can_msgs::Frame::ConstPtr& msg)
 		sd::ParseRxCANDataPEAKCan(ReceivedFrameCANRx, CurrentTwistLinearCANImu_Mps, GPS_Longitude, GPS_Latitude, IMU_Angle_X, IMU_Angle_Y, IMU_Angle_Z, IMU_Rate_X, IMU_Rate_Y, IMU_Rate_Z, IMU_Accel_X, IMU_Accel_Y, IMU_Accel_Z);
 	}else if(no_imu_string==_sd_gps_imu){
 		//Do nothing
+	}else if(carmaker_gps_string==_sd_gps_imu){
+		//Do nothing. This feature has not been implemented yet
 	}else{
 		ROS_WARN("SD_Vehicle_Interface parameter for sd_gps_imu is not valid");
 	}
@@ -80,6 +82,19 @@ void CurrentVelocity_callback(const geometry_msgs::TwistStampedConstPtr &msg)
 {
 	//Current Velocity Reported from NDT
     CurrentTwistLinearNDT_Mps = msg->twist.linear.x; //mps to kph
+}
+
+void CarMaker_CurrentVelocity_callback(const geometry_msgs::TwistStampedConstPtr &msg)
+{
+    //Current Velocity from CarMaker
+    CurrentTwistLinearCarMaker_Mps = msg->twist.linear.x;
+}
+
+void CarMaker_GPS_callback(const sensor_msgs::NavSatFixConstPtr &msg)
+{
+    //GPS from CarMaker
+    ROS_INFO("CarMakerGPS_status = %d", msg->status.status);
+
 }
 
 int main(int argc, char **argv)
@@ -108,6 +123,9 @@ int main(int argc, char **argv)
     ros::Subscriber ReceivedFrameCANRx_sub = nh.subscribe("received_messages", 100, ReceivedFrameCANRx_callback);
     ros::Subscriber current_velocity_sub = nh.subscribe<geometry_msgs::TwistStamped>("current_velocity", 1, CurrentVelocity_callback);
     ros::Subscriber twist_cmd_sub = nh.subscribe<geometry_msgs::TwistStamped>("twist_cmd", 100, TwistCommand_callback);
+    ros::Subscriber cm_current_velocity_sub = nh.subscribe<geometry_msgs::TwistStamped>("current_velocity_cm", 1, CarMaker_CurrentVelocity_callback);
+    ros::Subscriber cm_gps_sub = nh.subscribe<sensor_msgs::NavSatFix>("carmaker_gps", 1, CarMaker_GPS_callback);
+
 
     //publisher
     sent_msgs_pub = nh.advertise<can_msgs::Frame>("sent_messages", 100);
@@ -129,6 +147,8 @@ int main(int argc, char **argv)
 		} //Use the IMU speed source
 		else if (vehicle_can_speed_string==_sd_speed_source)  {
 			CurrentTwistLinearSD_Mps_Final = CurrentTwistLinearCANSD_Mps;
+		}else if (carmaker_speed_string==_sd_speed_source)  {
+			CurrentTwistLinearSD_Mps_Final = CurrentTwistLinearCarMaker_Mps;
 		}else{
 		 	ROS_WARN("SD_Vehicle_Interface parameter for sd_speed_source is not valid");
 		}
