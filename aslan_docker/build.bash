@@ -1,14 +1,17 @@
 #!/bin/bash
 echo "Script executed from: ${PWD}"
 
-BASEDIR=$(dirname $0)
+BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 echo "Script location: ${BASEDIR}"
 
-cd $BASEDIR
-cp -ar ../src ./src
-cp ../run ./run
+# Go to Aslan root directory
+pushd $(dirname $BASEDIR)
 
-sudo docker build -t aslan_docker .
+# Ensure latest version of Melodic base image is available
+docker pull ros:melodic
 
-rm -r src
-rm run
+# Build Docker image
+docker build -t aslan_docker -f aslan_docker/Dockerfile .
+
+# Go back to where we came from
+popd

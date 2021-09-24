@@ -16,6 +16,8 @@
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>aslan_msgs</exec_depend>
+  <exec_depend>python-psutil</exec_depend>
+  <exec_depend>rqt_graph</exec_depend>
 
   <export>
   </export>
