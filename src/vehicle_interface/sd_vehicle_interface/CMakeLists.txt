@@ -25,7 +25,6 @@ catkin_package(
 
 include_directories(
         include
-        src/sd_vehicle_interface/
         ${catkin_INCLUDE_DIRS}
 )
 
@@ -63,8 +62,7 @@ target_link_libraries(socketcan_bridge_node
 )
 
 
-add_executable(sd_vehicle_interface_node src/sd_vehicle_interface/sd_vehicle_interface_main.cpp
-    src/sd_vehicle_interface/sd_vehicle_interface.cpp
+add_executable(sd_vehicle_interface_node src/sd_vehicle_interface/sd_vehicle_interface.cpp
 		src/sd_vehicle_interface/sd_control.cpp
 		src/sd_vehicle_interface/sd_gps_imu.cpp)
 
@@ -79,7 +77,6 @@ install(
         sd_vehicle_interface_node
         socketcan_to_topic
         topic_to_socketcan
-        socketcan_bridge_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -87,7 +84,7 @@ install(
 
 install(
   DIRECTORY
-    include/
+    include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
 install(FILES config.sh
