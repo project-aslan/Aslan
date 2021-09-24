@@ -18,6 +18,7 @@ Used for trials on real-world automated vehicles.
 - Graphics User Interface (GUI) with integrated ROS tools
 - Docker and Source Code installation
 - Multiple Sensors Drivers
+- IPG CarMaker simulation integration
 - High level supervisor node, monitoring the heath of the system and publishing diagnostics
 - Object Detection using LiDAR and Radar
 - Emergency stop reaction
@@ -26,8 +27,6 @@ Used for trials on real-world automated vehicles.
 - Tunable yaw to steering percentage conversion map
 - Integrated Gazebo simulation model
 - 3 ways of simulation control: Aslan software, keyboard and joystick controllers
-- Vehicle Models visualization and parameters description
-- On-vehicle software testing and evaluation as well as parameters configuration
 - Normal Distribution Transform (NDT)* for localization and mapping
 - Voxel Grid and Ground Removal * point cloud filtering
 - Route planning using waypoints *
@@ -54,6 +53,8 @@ Complete Feature Log, available [here](https://github.com/project-aslan/Aslan/bl
 
 ## Getting Started
 
+The default branch of Project Aslan is the melodic branch for ROS melodic and Ubuntu 18.04. To use the kinetic version of the project with ROS kinetic and Ubuntu 16.04, checkout the kinetic branch.
+
 ### Installation
 
 #### 1. Allow software updates
@@ -62,41 +63,7 @@ Tick the boxes allowing  software updates from 'canonical partners' and 'source 
 Press reload and enter your sudo password
 
 #### 2. Install ROS Melodic Desktop Full
-For more information please visit [here](http://wiki.ros.org/melodic/Installation/Ubuntu )
-
-Setup your computer to accept software from packages.ros.org.
-```
-sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-```
-Setup your keys
-```
-sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
-```
-
-Update debian package index
-```
-sudo apt-get update
-```
-
-Install ROS Melodic Desktop Full
-```
-sudo apt-get install ros-melodic-desktop-full
-```
-
-Set up your environment
-```
-echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
-source ~/.bashrc
-```
-Install additional tools
-```
-sudo apt install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-catkin-tools
-```
-Initialise rosdep
-```
-sudo rosdep init
-rosdep update
-```
+Follow the instructions [here](http://wiki.ros.org/melodic/Installation/Ubuntu )
 
 #### 3. Clone the Project ASLAN repository with submodules
 
@@ -137,10 +104,16 @@ To start the Project ASLAN GUI, simply execute the bash script:
 ```
 
 <p float="center">
-  <img src="docs/img1.png" width="310" />
-  <img src="docs/img2.png" width="310" /> 
-  <img src="docs/img3.png" width="310" />
+  <img src="docs/img1.png" height="294" />
+  <img src="docs/img2.png" height="294" /> 
 </p>
+
+## IPG CarMaker integration
+Aslan (melodic version) has been modified to work with the CarMaker simulation. More information and instructions on how to run Aslan with CarMaker can be found here: [https://github.com/IPG-Automotive-UK/Aslan-CarMaker](https://github.com/IPG-Automotive-UK/Aslan-CarMaker).
+The vehicles in CarMaker can be controlled from the Aslan stack by following the tutorials below.  
+
+![](docs/Aslan_CM.gif)
+
 
 ## Contributing
 

@@ -1,5 +1,9 @@
 booted_cmds:
-  names: []
+  names:
+  - setup_tf
+  - Voxel Grid
+  - Ray Ground
+  - NDT Mapping
 lane_select:
   distance_threshold_neighbor_lanes: 5.0
   enablePlannerDynamicSwitch: false

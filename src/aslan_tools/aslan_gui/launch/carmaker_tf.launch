@@ -1,0 +1,10 @@
+<launch>
+
+    <node pkg="tf" type="static_transform_publisher" name="Fr1_to_baselink" args="0 0 0 0 0 0 Fr1 base_link 10"/>
+    <node pkg="tf" type="static_transform_publisher" name="FrLidarRSI_to_velodyne" args="0 0 0 0 0 0 Fr_LidarRSI velodyne 10"/>
+
+    <node pkg="tf" type="static_transform_publisher" name="base_link_to_radar" args="4.5 0 0.5 0 0 0 base_link Fr_RadarRSI 10">
+    </node>
+
+
+</launch>

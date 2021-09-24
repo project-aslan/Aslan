@@ -46,7 +46,8 @@
 double CurrentTwistLinearCANImu_Mps = 0.0;		//Current Twist Linear in Mps, as read from the CAN bus from the GPS/IMU
 double CurrentTwistLinearSD_Mps_Final = 0.0;	//The speed used within the control functions. Specified at launch wether this is based on vehicle can, IMU, or localisation.  
 double CurrentTwistLinearCANSD_Mps = 0.0; 		//Current Twist Linear in Mps, as read from the CAN bus from the StreetDrone XCU
-double CurrentTwistLinearNDT_Mps = 0.0;			//Current Twist Linear in Mps, as reported by NDT locolisation
+double CurrentTwistLinearNDT_Mps = 0.0;			//Current Twist Linear in Mps, as reported by NDT localisation
+double CurrentTwistLinearCarMaker_Mps = 0.0;
 double GPS_Latitude = 0.0;								//latitude, as read from the CAN bus
 double GPS_Longitude = 0.0;								//latitude, as read from the CAN bus
 double IMU_Angle_X =0;
@@ -96,11 +97,12 @@ static string twizy_string = "twizy";
 static string oxts_string = "oxts";
 static string peak_string = "peak";
 static string no_imu_string = "none";
+static string carmaker_gps_string= "carmaker_gps";
 
 static string vehicle_can_speed_string = "vehicle_can_speed"; 
 static string imu_speed_string = "imu_speed"; 
 static string ndt_speed_string = "ndt_speed"; 
-
+static string carmaker_speed_string = "carmaker_speed";
 
 
 
